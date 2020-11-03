@@ -29,14 +29,11 @@ class _homeState extends State<home> {
         _mloan.add(loan_mtype[i]);
       }
     }
-    print(_mloan);
     String _title =
         (widget.id) != null ? loan_type[widget.id]["bangla_name"] : "কৃষি ঋণ";
     int _length = (widget.id) != null ? count : loan_type.length;
     List _result = (widget.id) != null ? _mloan : loan_type;
-    print(_result);
 
-    print(widget.id);
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
