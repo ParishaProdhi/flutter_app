@@ -1,0 +1,182 @@
+[
+  {
+    "id": 0,
+    "name": "--Select--"
+  },
+  {
+    "id": 1,
+    "name": "BARISHAL"
+  },
+  {
+    "id": 2,
+    "name":"BHOLA"
+  },
+  {
+    "id": 3,
+    "name":"JHALAKATI"
+  },
+  {
+    "id": 4,
+    "name":"PEROJPUR"
+  },
+  {
+    "id": 5,
+    "name":"BARGUNA"
+  },
+  {
+    "id": 6,
+    "name":"FARIDPUR"
+  },
+  {
+    "id": 7,
+    "name":"GOPALGANJ"
+  },
+  {
+  "id": 8,
+  "name":"MADARIPUR"
+  },
+  {
+  "id": 9,
+  "name":"RAJBARI"
+  },
+  {
+  "id": 10,
+  "name":"SHARIATPUR"
+  },
+  {
+  "id": 11,
+  "name":"KHULNA CORP."
+  },
+  {
+  "id": 12,
+  "name":"KHULNA"
+  },
+  {
+  "id": 13,
+  "name":"BAGERHAT"
+  },
+  {
+  "id": 14,
+  "name":"SATKHIRA"
+  },
+  {
+  "id": 15,
+  "name":"JASHORE"
+  },
+  {
+  "id": 16,
+  "name":"JHENAIDAH"
+  },
+  {
+  "id": 17,
+  "name":"MAGURA"
+  },
+  {
+    "id": 18,
+    "name":"KUSHTIA"
+  },
+  {
+  "id": 19,
+  "name":"CHUADANGA"
+  },
+  {
+  "id": 20,
+  "name":"MEHERPUR"
+  },
+  {
+  "id": 21,
+  "name":"NARAIL"
+  },
+  {
+    "id": 22,
+    "name":"CUMILLA"
+  },
+  {
+    "id": 23,
+    "name":"LAKSHAM"
+  },
+  {
+    "id": 24,
+    "name":"BRAHMANBARIA"
+  },
+  {
+    "id": 25,
+    "name":"CHANDPUR"
+  },
+  {
+    "id": 26,
+    "name":"NOAKHALI"
+  },
+  {
+    "id": 27,
+    "name":"FENI"
+  },
+  {
+    "id": 28,
+    "name":"LAKSHMIPUR"
+  },
+  {
+    "id": 29,
+    "name":"CHATTOGRAM CORP."
+  },
+  {
+    "id": 30,
+    "name":"CHATTOGRAM (WEST)"
+  },
+  {
+    "id": 31,
+    "name":"AGRABAD CORP."
+  },
+  {
+    "id": 32,
+    "name":"CHATTOGRAM (EAST)"
+  },
+  {
+    "id": 33,
+    "name":"PATIYA"
+  },
+  {
+    "id": 34,
+    "name":"COX’S BAZAR"
+  },
+  {
+    "id": 35,
+    "name":"BANDARBAN"
+  },
+  {
+    "id": 36,
+    "name":"RANGAMATI"
+  },
+  {
+  "id": 37,
+  "name":"KHAGRACHARI"
+  },
+  {
+  "id": 38,
+  "name":"SYLHET CORP."
+  },
+  {
+  "id": 39,
+  "name":"SYLHET"
+  },
+  {
+    "id": 40,
+    "name":"SUNAMGANJ"
+  },
+  {
+    "id": 41,
+    "name":"MOULVI BAZAR"
+  },
+  {
+    "id": 42,
+    "name":"HABIGANJ"
+  },
+  {
+    "id": 43,
+    "name":"L.P.O"
+  },
+  {
+    "id": 44,
+    "name":"KAWRAN BAZAR CORP."
+  }
+]

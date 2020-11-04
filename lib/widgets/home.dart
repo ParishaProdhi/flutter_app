@@ -29,11 +29,11 @@ class _homeState extends State<home> {
         _mloan.add(loan_mtype[i]);
       }
     }
+
     String _title =
         (widget.id) != null ? loan_type[widget.id]["bangla_name"] : "কৃষি ঋণ";
     int _length = (widget.id) != null ? count : loan_type.length;
     List _result = (widget.id) != null ? _mloan : loan_type;
-
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
@@ -71,7 +71,8 @@ class _homeState extends State<home> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => FormPage()))
+                                        builder: (context) =>
+                                            FormPage(_result[index])))
                               }
                             : {
                                 Navigator.push(

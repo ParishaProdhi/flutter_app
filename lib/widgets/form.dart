@@ -1,19 +1,33 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/widgets/docs.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 
+import 'docs.dart';
+
 class FormPage extends StatefulWidget {
+  final _result;
+  FormPage(this._result);
   @override
-  _FormPageState createState() => _FormPageState();
+  _FormPageState createState() => _FormPageState(_result);
 }
 
 class _FormPageState extends State<FormPage> {
   var formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  var name, phone, nid, bday = '', gender, preadd, peradd;
+  var name, phone, nid, bday, gender, preadd, peradd, reg, br;
+
+  _FormPageState(final _result);
+  List<String> region = [];
+  void initState() {
+    _getRegionList();
+    super.initState();
+  }
 
   _showSnackBar() {
     var _mySnackBar =
@@ -21,60 +35,93 @@ class _FormPageState extends State<FormPage> {
     _scaffoldKey.currentState.showSnackBar(_mySnackBar);
   }
 
+  _sendMail() async {
+    String username = 'application.bkb@gmail.com';
+    String password = '03-11-2020';
+
+    final smtpServer = gmail(username, password);
+
+    final message = Message()
+      ..from = Address(username, 'Bangladesh Krishi Bank')
+      ..recipients.add('prodhi18@gmail.com')
+      ..subject = 'নিম্নোক্ত ঋণগ্রহণে ইচ্ছুক গ্রাহকের সহিত যোগাযোগ করুন'
+      ..html = "<div>"
+          "<h1><b>ঋণের ধরণঃ</b>${loan_type[widget._result["id"] - 1]["bangla_name"]}(${widget._result["bangla_name"]})<br></h1>"
+          "<div>"
+          "<b>নামঃ</b>${this.name}<br>"
+          "<b>যোগাযোগঃ</b>${this.phone}<br>"
+          "<b>স্মার্ট কার্ড/জাতীয় পরিচয়পত্র নংঃ</b>${this.nid}<br>"
+          "<b>স্থায়ী ঠিকানাঃ</b>${this.peradd}<br>"
+          "<b>বর্তমান ঠিকানাঃ</b>${this.peradd}<br>"
+          "<b>লিঙ্গঃ</b>${this.gender}<br>"
+          "<b>জন্মতারিখঃ</b>${this.bday}<br>"
+          "</div></div>";
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } on MailerException catch (e) {
+      print('Message not sent.');
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
+    }
+
+    var connection = PersistentConnection(smtpServer);
+
+    await connection.send(message);
+
+    await connection.close();
+  }
+
   Future<void> handleSubmit() async {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
       _showSnackBar();
-      //
-      //
-      String username = 'prodhi18@gmail.com';
-      String password = '025915jb';
+      // _sendMail();
+      _getRegionList();
+      print(this.reg + this.br);
+    }
+  }
 
-      final smtpServer = gmail(username, password);
+  List regionList;
+  Future<String> _getRegionList() async {
+    await rootBundle.loadString("assets/json/regions.json").then((responseReg) {
+      var dataReg = json.decode(responseReg);
 
-      final message = Message()
-        ..from = Address(username, 'Your name')
-        ..recipients.add('prodhi18@gmail.com')
-        ..subject = 'নিম্নোক্ত ঋণগ্রহণে ইচ্ছুক গ্রাহকের সহিত যোগাযোগ করুন'
-        ..html = "<div>"
-            "<h1><b>নামঃ</b>${this.name}</h1>"
-            "<div>"
-            "<b>যোগাযোগঃ</b>${this.phone}<br>"
-            "<b>স্মার্ট কার্ড/জাতীয় পরিচয়পত্র নংঃ</b>${this.nid}<br>"
-            "<b>স্থায়ী ঠিকানাঃ</b>${this.peradd}<br>"
-            "<b>বর্তমান ঠিকানাঃ</b>${this.peradd}<br>"
-            "<b>লিঙ্গঃ</b>${this.gender}<br>"
-            "<b>জন্মতারিখঃ</b>${this.bday}"
-            "</div></div>";
+      setState(() {
+        regionList = dataReg;
+      });
+    });
+  }
 
-      try {
-        final sendReport = await send(message, smtpServer);
-        print('Message sent: ' + sendReport.toString());
-      } on MailerException catch (e) {
-        print('Message not sent.');
-        for (var p in e.problems) {
-          print('Problem: ${p.code}: ${p.msg}');
+  List branchList;
+
+  Future<String> _getBranchList(String _region) async {
+    print("Hello I am hit!");
+    print(regionList[int.parse(_region)]['name']);
+    await rootBundle.loadString("assets/json/branches.json").then((response) {
+      var data = json.decode(response);
+      var appropriateData = [];
+      int i;
+      for (i = 1; i < data.length; i++) {
+        if (data[i]["region"] == regionList[int.parse(_region)]['name']) {
+          appropriateData.add(data[i]);
         }
       }
-
-      var connection = PersistentConnection(smtpServer);
-
-      await connection.send(message);
-
-      await connection.close();
-    }
-    print("Name is: ${this.name}");
-    print("phone is: ${this.phone}");
-    print("nid is: ${this.nid}");
-    print("preadd is: ${this.preadd}");
-    print("peradd is: ${this.peradd}");
-    print("peradd is: ${this.gender}");
-    print("date is: ${this.bday}");
+      setState(() {
+        branchList = appropriateData;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     String _value = '--Select--';
+    int i;
+    bday = '';
+    String _region = '0';
+    String _branch;
     return Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -258,7 +305,7 @@ class _FormPageState extends State<FormPage> {
                             },
                             validator: (String value) {
                               if (value.isEmpty) {
-                                return 'Please enter a valid type of business';
+                                return 'আবশ্যক তথ্য';
                               }
                             },
                             items: [
@@ -285,6 +332,72 @@ class _FormPageState extends State<FormPage> {
                               this.gender = value;
                             },
                           ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
+                          child: SizedBox(
+                            width: 100,
+                            child: Text(
+                              'যে ব্রাঞ্চ থেকে ঋণ গ্রহণ করবেন',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                        Column(
+                          children: <Widget>[
+                            SizedBox(
+                              width: 216,
+                              child: DropdownButtonFormField<String>(
+                                isExpanded: true,
+                                value: _region,
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    _region = newValue;
+                                    _getBranchList(_region);
+                                  });
+                                },
+                                hint: Text('Select Region'),
+                                items: regionList?.map((item) {
+                                      return DropdownMenuItem(
+                                        child: Text(item['name']),
+                                        value: item['id'].toString(),
+                                      );
+                                    })?.toList() ??
+                                    [],
+                                onSaved: (value) {
+                                  this.reg =
+                                      regionList[int.parse(value)]['name'];
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: 216,
+                              child: DropdownButtonFormField<String>(
+                                isExpanded: true,
+                                value: _branch,
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    _branch = newValue;
+                                  });
+                                },
+                                hint: Text('Select Branch'),
+                                items: branchList?.map((item) {
+                                      return new DropdownMenuItem(
+                                        child: new Text(item['branch_name']),
+                                        value: item['id'].toString(),
+                                      );
+                                    })?.toList() ??
+                                    [],
+                                onSaved: (value) {
+                                  this.br = value;
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
