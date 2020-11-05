@@ -103,12 +103,14 @@ class _FormPageState extends State<FormPage> {
     await rootBundle.loadString("assets/json/branches.json").then((response) {
       var data = json.decode(response);
       var appropriateData = [];
+      appropriateData.add(data[0]);
       int i;
       for (i = 1; i < data.length; i++) {
         if (data[i]["region"] == regionList[int.parse(_region)]['name']) {
           appropriateData.add(data[i]);
         }
       }
+      print(appropriateData);
       setState(() {
         branchList = appropriateData;
       });
@@ -121,7 +123,7 @@ class _FormPageState extends State<FormPage> {
     int i;
     bday = '';
     String _region = '0';
-    String _branch;
+    String _branch = branchList != null ? branchList[0]['id'].toString() : '0';
     return Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -387,13 +389,14 @@ class _FormPageState extends State<FormPage> {
                                 hint: Text('Select Branch'),
                                 items: branchList?.map((item) {
                                       return new DropdownMenuItem(
-                                        child: new Text(item['branch_name']),
+                                        child: Text(item['branch_name']),
                                         value: item['id'].toString(),
                                       );
                                     })?.toList() ??
                                     [],
                                 onSaved: (value) {
-                                  this.br = value;
+                                  this.br = branchList[int.parse(value)]
+                                      ['branch_name'];
                                 },
                               ),
                             ),

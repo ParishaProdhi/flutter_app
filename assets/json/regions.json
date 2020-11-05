@@ -178,5 +178,77 @@
   {
     "id": 44,
     "name":"KAWRAN BAZAR CORP."
+  },
+  {
+    "id": 45,
+    "name":"DHAKA"
+  },
+  {
+    "id": 46,
+    "name":"BANANI CORP."
+  },
+  {
+    "id": 47,
+    "name":"GAZIPUR"
+  },
+  {
+    "id": 48,
+    "name":"MANIKGANJ"
+  },
+  {
+    "id": 49,
+    "name":"MUNSHIGANJ"
+  },
+  {
+    "id": 50,
+    "name":"NARSINGDI"
+  },
+  {
+    "id": 51,
+    "name":"NARAYANGONJ CORP."
+  },
+  {
+    "id": 52,
+    "name":"NARAYANGONJ"
+  },
+  {
+    "id": 53,
+    "name":"MYMENSING (SOUTH)"
+  },
+  {
+    "id": 54,
+    "name":"MYMENSING (NORTH)"
+  },
+  {
+    "id": 55,
+    "name":"KISHOREGANJ"
+  },
+  {
+    "id": 56,
+    "name":"NETRAKONA"
+  },
+  {
+    "id": 57,
+    "name":"TANGAIL (SOUTH)"
+  },
+  {
+    "id": 58,
+    "name":"TANGAIL (NORTH)"
+  },
+  {
+    "id": 59,
+    "name":"SHERPUR"
+  },
+  {
+    "id": 60,
+    "name":"JAMALPUR"
+  },
+  {
+    "id": 61,
+    "name":"PATUAKHALI"
+  },
+  {
+    "id": 62,
+    "name":"DIVISONS"
   }
 ]
