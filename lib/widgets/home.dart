@@ -1,18 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'docs.dart';
 import 'form.dart';
 
 class home extends StatefulWidget {
-  final id;
-  home([this.id]);
   @override
-  _homeState createState() => _homeState(id);
+  _homeState createState() => _homeState();
 }
 
 class _homeState extends State<home> {
-  _homeState(final id);
   @override
   void initState() {
     // TODO: implement initState
@@ -21,19 +17,6 @@ class _homeState extends State<home> {
 
   @override
   Widget build(BuildContext context) {
-    var i, count = 0;
-    List _mloan = [];
-    for (i = 1; i < loan_mtype.length; i++) {
-      if (loan_mtype[i]["id"] - 1 == widget.id) {
-        count++;
-        _mloan.add(loan_mtype[i]);
-      }
-    }
-
-    String _title =
-        (widget.id) != null ? loan_type[widget.id]["bangla_name"] : "কৃষি ঋণ";
-    int _length = (widget.id) != null ? count : loan_type.length;
-    List _result = (widget.id) != null ? _mloan : loan_type;
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
@@ -44,51 +27,69 @@ class _homeState extends State<home> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             centerTitle: true,
-            title: Text(_title),
+            title: Text('Krishi Loan'),
             backgroundColor: Colors.transparent,
           ),
-          body: Container(
-              child: ListView.builder(
-            itemCount: _length,
-            itemBuilder: (BuildContext context, int index) {
-              return Row(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(15),
-                    height: 90,
-                    width: 360,
-                    child: ListTile(
-                      tileColor: Colors.yellow,
-                      title: Text(
-                        _result[index]["bangla_name"],
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      // subtitle: Text(loan_type[index]["name"]),
-                      onTap: () => {
-                        (widget.id != null)
-                            ? {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            FormPage(_result[index])))
-                              }
-                            : {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            home(_result[index]["id"] - 1)))
-                              }
-                      },
-                    ),
+          body: Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    "বাংলাদেশ কৃষি ব্যাংক-এ আপনাকে স্বাগতম!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  Divider(),
-                ],
-              );
-            },
-          ))),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: Text(
+                    "বাংলাদেশ কৃষি ব্যাংক (বিকেবি) একটি শতভাগ রাষ্ট্রীয় মালিকানাধীন বিশেষায়িত ব্যাংক।১৯৭৩ সালে রাস্ট্রপতি আদেশ নং-২৭ বলে প্রতিষ্ঠিত বাংলাদেশের কৃষির মতো প্রকৃতি নির্ভর অনিশ্চিত এবং ঝুঁকিপূর্ণ খাতে অর্থায়নের জন্য দেশের বৃহত্তম বিশেষায়িত ব্যাংক।",
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: Text(
+                    " আমানত,ঋণ,বৈদেশিক বানিজ্যসহ সব ধরনের আধুনিক ব্যাংকিং কার্যক্রম পরিচালনা করে বাংলাদেশ কৃষি ব্যাংক।গ্রাম-গঞ্জের ১০৩৮টি শাখার মধ্যে প্রায় ৫২০টি অন-লাইন শাখার মাধ্যমে বিশ্বের যে কোন দেশের প্রবাসীদের রেমিট্যান্সের টাকা দ্রুততম সময়ে স্বজনদের দোরগোড়ায় পৌঁছে দিচ্ছে।",
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: Text(
+                    "ঢাকা, চট্টগ্রাম, সিলেট,  খুলনা ও ময়মনসিংহ শহরে এটিএম বুথের মাধ্যমে ২৪ ঘন্টা ব্যাংকিং সেবা প্রদান করছে।ব্যাংকের নিজস্ব এটিএম বুথ ছাড়াও যে কোন ব্যাংকের এটিএম বুথ হতে টাকা উত্তোলন এবং কেনাকাটায় যে কোন পয়েন্ট অব সেলে খুব সহজেই কৃষি ব্যাংকের ডেবিট কার্ড ব্যবহার করা যায়।আধুনিক ও যুগোপযোগী ব্যাংকিং সুবিধা প্রদানের লক্ষ্যে ডিজিটালাইজেশনে বাংলাদেশ কৃষি ব্যাংক অনেকদুর এগিয়ে আছে। ",
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  height: 50,
+                  width: 300,
+                  child: RaisedButton(
+                    color: Colors.orange,
+                    child: Text(
+                      'আমানত/ঋণের আবেদন',
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => FormPage()));
+                    },
+                  ),
+                ),
+              ],
+            ),
+          )),
     );
   }
 }

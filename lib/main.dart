@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/widgets/home.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
       title: 'My App', home: HomePage(), debugShowCheckedModeBanner: false));
 }

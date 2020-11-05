@@ -54,6 +54,10 @@ flutter:
     - assets/back.jpg
     - assets/json/branches.json
     - assets/json/regions.json
+    - assets/json/districts.json
+    - assets/json/divisions.json
+    - assets/json/unions.json
+    - assets/json/upazillas.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
