@@ -6,6 +6,7 @@ import 'package:flutter_app/widgets/home.dart';
 import 'package:flutter_app/widgets/textContainer.dart';
 
 import 'listContainer.dart';
+import 'menuContainer.dart';
 
 var id;
 
@@ -24,6 +25,7 @@ class _NavDrawerState extends State<NavDrawer> {
             child: new Image.asset('assets/bkbIcon.png', fit: BoxFit.cover),
           ),
           ListTile(
+            leading: Icon(Icons.home),
             title: Text('হোম'),
             onTap: () => {
               Navigator.push(
@@ -31,7 +33,7 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            // leading: Icon(Icons.verified_user),
+            leading: Icon(Icons.article_outlined),
             title: Text('সিটিজেন চার্টার'),
             onTap: () => {
               Navigator.push(
@@ -42,13 +44,13 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            // leading: Icon(Icons.settings),
+            leading: Icon(Icons.money_rounded),
             title: Text('ঋণ'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => listContainer([
+                      builder: (context) => menuContainer([
                             [
                               "সাধারন তথ্যাবলী",
                               listContainer([
@@ -524,13 +526,13 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            // leading: Icon(Icons.exit_to_app),
+            leading: Icon(Icons.attach_money_outlined),
             title: Text('আমানত'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => listContainer([
+                      builder: (context) => menuContainer([
                             [
                               "সঞ্চয়ী আমানত হিসাব",
                               textContainer("this leads to nothing", "")
@@ -580,7 +582,7 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            // leading: Icon(Icons.exit_to_app),
+            leading: Icon(Icons.article),
             title: Text('বিশেষ কর্মসূচি'),
             onTap: () => {
               Navigator.push(
@@ -591,7 +593,7 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            // leading: Icon(Icons.exit_to_app),
+            leading: Icon(Icons.contact_page_outlined),
             title: Text('যোগাযোগ'),
             onTap: () => {
               Navigator.push(
@@ -602,7 +604,7 @@ class _NavDrawerState extends State<NavDrawer> {
             },
           ),
           ListTile(
-            // leading: Icon(Icons.exit_to_app),
+            leading: Icon(Icons.people),
             title: Text('প্রয়োজনীয় প্রশ্ন ও উত্তর'),
             onTap: () => {
               Navigator.push(
