@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 
@@ -21,7 +22,7 @@ class _FormPageState extends State<FormPage> {
   var name,
       phone,
       nid,
-      bday = '',
+      bday,
       gender,
       div,
       dis,
@@ -67,13 +68,17 @@ class _FormPageState extends State<FormPage> {
       ..subject = 'নিম্নোক্ত গ্রাহকের সহিত যোগাযোগ করুন'
       ..html = "<div>"
           "<div>"
-          "<h1><b>${app_type == 'loan' ? 'আমানতপ্রদানে আগ্রহী' : 'ঋণগ্রহণে আগ্যহী'}</b></h1>"
-          "<b>নামঃ</b>${this.name}<br>"
-          "<b>যোগাযোগঃ</b>${this.phone}<br>"
-          "<b>স্মার্ট কার্ড/জাতীয় পরিচয়পত্র নংঃ</b>${this.nid}<br>"
-          "<b>ঠিকানাঃ</b>বিভাগ-${this.div}, জেলা-${this.dis}, উপজেলা-${this.upa}, ইউনিয়ন-${this.uni}<br>"
-          "<b>লিঙ্গঃ</b>${this.gender}<br>"
-          "<b>জন্মতারিখঃ</b>${this.bday}<br>"
+          "<h1><b>${app_type == 'loan' ? 'ঋণগ্রহণে আগ্রহী' : 'আমানতপ্রদানে আগ্রহী'}</b></h1>"
+          "<b>${app_type == 'loan' ? 'ঋণের ধরণঃ ' : 'আমানতের ধরণঃ '}</b>"
+          "${app_type == 'loan' ? this.loan_type : this.dep_type}"
+          "${app_type == 'dep' ? '(' + this.dep_scheme_type + ")" : ""}"
+          "<br>"
+          "<b>নামঃ </b>${this.name}<br>"
+          "<b>যোগাযোগঃ </b>${this.phone}<br>"
+          "<b>স্মার্ট কার্ড/জাতীয় পরিচয়পত্র নংঃ </b>${this.nid}<br>"
+          "<b>ঠিকানাঃ </b>বিভাগ-${this.div}, জেলা-${this.dis}, উপজেলা-${this.upa}, ইউনিয়ন-${this.uni}<br>"
+          "<b>লিঙ্গঃ </b>${this.gender}<br>"
+          "<b>জন্মতারিখঃ </b>${this.bday}<br>"
           "</div></div>";
 
     try {
@@ -87,11 +92,44 @@ class _FormPageState extends State<FormPage> {
     }
   }
 
+  Future<List> _saveToDB() async {
+    var loan_type_check_null =
+        (this.loan_type != null) ? this.loan_type : "not_applicable";
+    var dep_type_check_null =
+        (this.dep_type != null) ? this.dep_type : "not_applicable";
+    var dep_scheme_type_check_null = (this.dep_scheme_type != null)
+        ? this.dep_scheme_type
+        : "not_applicable";
+    final response =
+        await http.post("http://39456402753f.ngrok.io/post", body: {
+      "name": this.name,
+      "phone": this.phone,
+      "nid": this.nid,
+      "address": "ঠিকানাঃ " +
+          this.div +
+          ", জেলা-" +
+          this.dis +
+          ", উপজেলা-" +
+          this.upa +
+          ", ইউনিয়ন-" +
+          this.uni,
+      "bday": this.bday,
+      "gender": this.gender,
+      "app_type": this.app_type,
+      "loan_type": loan_type_check_null,
+      "dep_type": dep_type_check_null,
+      "dep_scheme_type": dep_scheme_type_check_null
+    });
+    print(response.statusCode);
+    print(response.body);
+  }
+
   Future<void> handleSubmit() async {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
       _showSnackBar();
-      _sendMail();
+      _saveToDB();
+      // _sendMail();
     }
   }
 
@@ -165,7 +203,7 @@ class _FormPageState extends State<FormPage> {
   Widget _switch_dep_loan(String s) {
     print(s);
     switch (s) {
-      case 'dep':
+      case 'deposit':
         return Row(
           children: <Widget>[
             Container(
@@ -667,15 +705,15 @@ class _FormPageState extends State<FormPage> {
                           ),
                         ),
                         SizedBox(
-                          width: 50,
+                          width: 94,
                           child: TextFormField(
                             keyboardType: TextInputType.number,
-                            decoration: InputDecoration(labelText: 'DD'),
+                            decoration: InputDecoration(labelText: 'YYYY'),
                             inputFormatters: [
-                              LengthLimitingTextInputFormatter(2),
+                              LengthLimitingTextInputFormatter(4),
                             ],
                             onSaved: (value) {
-                              this.bday += value;
+                              this.bday = value;
                             },
                             validator: (value) {
                               if (value.isEmpty) return ("আবশ্যক তথ্য");
@@ -701,12 +739,12 @@ class _FormPageState extends State<FormPage> {
                         ),
                         Text('   '),
                         SizedBox(
-                          width: 94,
+                          width: 50,
                           child: TextFormField(
                             keyboardType: TextInputType.number,
-                            decoration: InputDecoration(labelText: 'YYYY'),
+                            decoration: InputDecoration(labelText: 'DD'),
                             inputFormatters: [
-                              LengthLimitingTextInputFormatter(4),
+                              LengthLimitingTextInputFormatter(2),
                             ],
                             onSaved: (value) {
                               this.bday += '-' + value;
@@ -767,7 +805,12 @@ class _FormPageState extends State<FormPage> {
                               ),
                             ],
                             onSaved: (value) {
-                              this.gender = value;
+                              if (value == 'পুরুষ')
+                                this.gender = 'male';
+                              else if (value == 'মহিলা')
+                                this.gender = 'female';
+                              else
+                                this.gender = 'others';
                             },
                           ),
                         ),
@@ -811,7 +854,7 @@ class _FormPageState extends State<FormPage> {
                                 child: Text(
                                   'আমানত',
                                 ),
-                                value: 'dep',
+                                value: 'deposit',
                               ),
                               DropdownMenuItem(
                                 child: Text('ঋণ'),

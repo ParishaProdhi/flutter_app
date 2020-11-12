@@ -1,7 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'form.dart';
+import 'nav-drawer.dart';
 
 class home extends StatefulWidget {
   @override
@@ -9,6 +13,8 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
+  String assetPDFPath = "";
+  String urlPDFPath = "";
   @override
   void initState() {
     // TODO: implement initState
@@ -30,6 +36,7 @@ class _homeState extends State<home> {
             title: Text('Krishi Loan'),
             backgroundColor: Colors.transparent,
           ),
+          drawer: NavDrawer(),
           body: Padding(
             padding: EdgeInsets.all(20),
             child: Column(
@@ -84,6 +91,25 @@ class _homeState extends State<home> {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => FormPage()));
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 40,
+                ),
+                Container(
+                  height: 50,
+                  width: 300,
+                  child: RaisedButton(
+                    color: Colors.orange,
+                    child: Text(
+                      'pdf',
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    onPressed: () async {
+                      PDFDocument doc = await PDFDocument.fromAsset(
+                          'assets/documents/crop_loan_calender.pdf');
                     },
                   ),
                 ),

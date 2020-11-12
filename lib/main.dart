@@ -17,6 +17,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return home();
+    return Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+          image: AssetImage('assets/back.jpg'),
+          fit: BoxFit.fill,
+        )),
+        child: home());
+    // return home();
   }
 }
