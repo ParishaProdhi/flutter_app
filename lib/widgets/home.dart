@@ -10,11 +10,10 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
-  String assetPDFPath = "";
-  String urlPDFPath = "";
-  @override
+  var a;
   void initState() {
-    // TODO: implement initState
+    a = NetworkImage(
+        'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fback.jpg?alt=media&token=12c57aa2-3d6e-4ff8-91fb-2a951cc5ab3d');
     super.initState();
   }
 
@@ -23,7 +22,7 @@ class _homeState extends State<home> {
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
-        image: AssetImage('assets/back.jpg'),
+        image: a,
         fit: BoxFit.fill,
       )),
       child: Scaffold(

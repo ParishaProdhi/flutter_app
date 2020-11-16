@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-// ignore: avoid_web_libraries_in_flutter
-// import 'dart:html';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,8 +41,10 @@ class _FormPageState extends State<FormPage> {
       dep_scheme_value = '--Select--';
 
   String _division = '0', _district = '0', _upazilla = '0', _union = '0';
-
+  var a;
   void initState() {
+    a = NetworkImage(
+        'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fback.jpg?alt=media&token=12c57aa2-3d6e-4ff8-91fb-2a951cc5ab3d');
     _getDivisionList();
     super.initState();
   }
@@ -58,7 +57,7 @@ class _FormPageState extends State<FormPage> {
 
   _sendMail() async {
     String username = 'application.bkb@gmail.com';
-    String password = '03-11-2020';
+    String password = '2020|abc';
 
     final smtpServer = gmail(username, password);
 
@@ -92,7 +91,7 @@ class _FormPageState extends State<FormPage> {
     }
   }
 
-  Future<List> _saveToDB() async {
+  Future<void> _saveToDB() async {
     var loan_type_check_null =
         (this.loan_type != null) ? this.loan_type : "not_applicable";
     var dep_type_check_null =
@@ -101,7 +100,7 @@ class _FormPageState extends State<FormPage> {
         ? this.dep_scheme_type
         : "not_applicable";
     final response =
-        await http.post("http://39456402753f.ngrok.io/post", body: {
+        await http.post("https://05222a42351a.ngrok.io/post", body: {
       "name": this.name,
       "phone": this.phone,
       "nid": this.nid,
@@ -120,8 +119,6 @@ class _FormPageState extends State<FormPage> {
       "dep_type": dep_type_check_null,
       "dep_scheme_type": dep_scheme_type_check_null
     });
-    print(response.statusCode);
-    print(response.body);
   }
 
   Future<void> handleSubmit() async {
@@ -129,11 +126,34 @@ class _FormPageState extends State<FormPage> {
       formKey.currentState.save();
       _showSnackBar();
       _saveToDB();
-      // _sendMail();
+      _sendMail();
     }
   }
 
+  // Future<void> _getDivisionList() async {
+  //   await rootBundle
+  //       .loadString("assets/json/divisions.json")
+  //       .then((responseDiv) {
+  //     var dataReg = json.decode(responseDiv);
+  //
+  //     setState(() {
+  //       divisionList = dataReg;
+  //     });
+  //   });
+  // }
+
   Future<void> _getDivisionList() async {
+    // String url =
+    //     'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fjson%2Fdivisions.json?alt=media&token=4b506781-3ca6-4ea8-a8f2-a333ff360a28';
+    // final response = await http.get(url);
+    // var dataReg;
+    // if (200 == response.statusCode) {
+    //   dataReg = json.decode(response.body);
+    // }
+    // setState(() {
+    //   divisionList = dataReg;
+    // });
+    //--
     await rootBundle
         .loadString("assets/json/divisions.json")
         .then((responseDiv) {
@@ -146,6 +166,22 @@ class _FormPageState extends State<FormPage> {
   }
 
   Future<void> _getDistrictList(String _division) async {
+    // String url =
+    //     'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fjson%2Fdistricts.json?alt=media&token=88338ff8-7909-4fb5-8ce0-4a7f0115c5e8';
+    // var response = await http.get(url);
+    // var dataDis = json.decode(response.body);
+    // var appropriateDataDis = [];
+    // appropriateDataDis.add(dataDis[0]);
+    // int i;
+    // for (i = 1; i < dataDis.length; i++) {
+    //   if (dataDis[i]["division_id"] == _division) {
+    //     appropriateDataDis.add(dataDis[i]);
+    //   }
+    // }
+    // setState(() {
+    //   districtList = appropriateDataDis;
+    // });
+    //---
     await rootBundle
         .loadString("assets/json/districts.json")
         .then((responseDis) {
@@ -165,6 +201,22 @@ class _FormPageState extends State<FormPage> {
   }
 
   Future<void> _getUpazillaList(String _district) async {
+    // String url =
+    //     'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fjson%2Fupazillas.json?alt=media&token=2a3f9079-5379-40ee-b21b-8b486ec8d4ba';
+    // var response = await http.get(url);
+    // var dataUpa = json.decode(response.body);
+    // var appropriateDataUpa = [];
+    // appropriateDataUpa.add(dataUpa[0]);
+    // int i;
+    // for (i = 1; i < dataUpa.length; i++) {
+    //   if (dataUpa[i]["district_id"] == _district) {
+    //     appropriateDataUpa.add(dataUpa[i]);
+    //   }
+    // }
+    // setState(() {
+    //   upazillaList = appropriateDataUpa;
+    // });
+//---
     await rootBundle
         .loadString("assets/json/upazillas.json")
         .then((responseUpa) {
@@ -184,6 +236,23 @@ class _FormPageState extends State<FormPage> {
   }
 
   Future<void> _getUnionList(String _upazilla) async {
+    // String url =
+    //     'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fjson%2Funions.json?alt=media&token=d4ba259a-85e7-4734-bf2e-7c8f82f2fc63';
+    // var response = await http.get(url);
+    // var dataUni = json.decode(response.body);
+    // var appropriateDataUni = [];
+    // appropriateDataUni.add(dataUni[0]);
+    // int i;
+    // for (i = 1; i < dataUni.length; i++) {
+    //   if (dataUni[i]["upazilla_id"] == _upazilla) {
+    //     appropriateDataUni.add(dataUni[i]);
+    //   }
+    // }
+    // setState(() {
+    //   unionList = appropriateDataUni;
+    // });
+    //----
+
     await rootBundle.loadString("assets/json/unions.json").then((responseUni) {
       var dataUni = json.decode(responseUni);
       var appropriateDataUni = [];
@@ -495,7 +564,7 @@ class _FormPageState extends State<FormPage> {
     return Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-          image: AssetImage('assets/back.jpg'),
+          image: a,
           fit: BoxFit.fill,
         )),
         child: Scaffold(
@@ -550,8 +619,10 @@ class _FormPageState extends State<FormPage> {
                         decoration: InputDecoration(
                             labelText: 'স্মার্ট কার্ড/জাতীয় পরিচয়পত্র নং'),
                         validator: (value) {
-                          if (value.length != 10)
-                            return ("সঠিক তথ্য প্রদান করুন");
+                          if (value.isEmpty)
+                            return ("জাতীয় পরিচয়পত্র নং প্রদান আবশ্যক");
+                          // if (value.length != 10)
+                          //   return ("সঠিক তথ্য প্রদান করুন");
                         },
                         onSaved: (value) {
                           this.nid = value;
@@ -613,7 +684,7 @@ class _FormPageState extends State<FormPage> {
                                     _getUpazillaList(_district);
                                   });
                                 },
-                                hint: Text('Select Branch'),
+                                hint: Text('Select District'),
                                 items: districtList?.map((item) {
                                       return new DropdownMenuItem(
                                         child: Text(item['name']),

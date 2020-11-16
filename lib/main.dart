@@ -15,15 +15,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var a;
+  void initState() {
+    a = NetworkImage(
+        'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fback.jpg?alt=media&token=12c57aa2-3d6e-4ff8-91fb-2a951cc5ab3d');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-          image: AssetImage('assets/back.jpg'),
+          image: a,
           fit: BoxFit.fill,
         )),
         child: home());
-    // return home();
   }
 }

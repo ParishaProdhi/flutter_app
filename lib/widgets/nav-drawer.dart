@@ -1,10 +1,12 @@
-// import 'dart:html';
-
+import 'dart:io' as io;
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_app/widgets/docs.dart';
 import 'package:flutter_app/widgets/home.dart';
+import 'package:flutter_app/widgets/pdfContainer.dart';
 import 'package:flutter_app/widgets/textContainer.dart';
-
+import 'package:path_provider/path_provider.dart';
 import 'listContainer.dart';
 import 'menuContainer.dart';
 
@@ -15,6 +17,34 @@ class NavDrawer extends StatefulWidget {
 }
 
 class _NavDrawerState extends State<NavDrawer> {
+  String assetPDFPath = "";
+  var a;
+  void initState() {
+    super.initState();
+    a = new Image.network(
+        'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2FbkbIcon.png?alt=media&token=887885bd-fc97-4187-af91-b39ec0f35d2a',
+        fit: BoxFit.cover);
+    getFileFromAsset("assets/json/crop_loan_calender.pdf").then((f) {
+      setState(() {
+        assetPDFPath = f.path;
+        print(assetPDFPath);
+      });
+    });
+  }
+
+  Future<io.File> getFileFromAsset(String asset) async {
+    try {
+      var data = await rootBundle.load(asset);
+      var bytes = data.buffer.asUint8List();
+      var dir = await getApplicationDocumentsDirectory();
+      io.File file = io.File("${dir.path}/mypdf.pdf");
+
+      io.File assetFile = await file.writeAsBytes(bytes);
+      return assetFile;
+    } catch (e) {
+      throw Exception("Error opening asset file");
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -22,7 +52,7 @@ class _NavDrawerState extends State<NavDrawer> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: new Image.asset('assets/bkbIcon.png', fit: BoxFit.cover),
+            child: a,
           ),
           ListTile(
             leading: Icon(Icons.home),
@@ -64,24 +94,33 @@ class _NavDrawerState extends State<NavDrawer> {
                                 ],
                                 [
                                   "ফসল ঋণ বিতরন পঞ্জিকা",
-                                  textContainer("this leads to nothing", "")
+                                  pdfContainer(path: assetPDFPath)
+                                  // textContainer(
+                                  //     "this led to nothing or to a PDF file in the previous application",
+                                  //     "")
                                 ],
                                 [
                                   "ঋণের সুদ",
                                   listContainer([
                                     [
                                       "ঋণের সুদের হার (শস্য)",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "ঋণের সুদের হার (অন্যান্য)",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ]
                                   ])
                                 ],
                                 [
                                   "ঋণের নিয়মাচার",
-                                  textContainer("this leads to nothing", "")
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ]
                               ])
                             ],
@@ -101,11 +140,15 @@ class _NavDrawerState extends State<NavDrawer> {
                                   listContainer([
                                     [
                                       "SME ঋণ প্রয়োজনীয় কাগজপত্র",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "প্রকল্প ঋণ /চলতি মুলধন ঋণ/চলতি মুলধন ঋণ প্রয়োজনীয় কাগজপত্র",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ]
                                   ])
                                 ]
@@ -123,108 +166,130 @@ class _NavDrawerState extends State<NavDrawer> {
                                         [
                                           "রোপা আমন",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "বোরো",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "গম",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "আলু",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "আখ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "সরিষা/বাদাম",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "ডাল/শীত কালীন শাকসবজি",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "আউশ/বোনা আমন",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "পাট",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "ভুট্টা",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "তিল/গ্রীষ্মকালীন শাক সবজী",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "তুলা",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "আদা/কচু",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "মৎস্যচাষ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "চিংড়ি চাষ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "একুয়াকালচার",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "রেণু উৎপাদন",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "লবণ চাষ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "কলাচাষ ও বিবিধ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "শস্যগুদাম ও বাজারজাতকরণ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ]
                                       ])
                                     ],
                                     [
                                       "চা উৎপাদন ঋণ",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "নগদ মুলধন ঋণ/চলতি মুলধন ঋণ",
@@ -232,32 +297,38 @@ class _NavDrawerState extends State<NavDrawer> {
                                         [
                                           "রপ্তানী ঋণ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "মৎস্য প্রক্রিয়াজাতকরণ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "আলু সংরক্ষণ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "কৃষি পণ্যের বিপণন",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "সার ও কীটনাশক ঔষধের ডিলার , কৃষি পণ্যের ক্ষুদ্র ব্যবসায়ী",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "অন্যান্য (এসএমই খাত সহ)",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ]
                                       ])
                                     ],
@@ -267,102 +338,122 @@ class _NavDrawerState extends State<NavDrawer> {
                                         [
                                           "রোপা আমন",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "বোরো",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "গম",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "আলু",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "আখ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "সরিষা/বাদাম",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "ডাল/শীত কালীন শাকসবজি",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "আউশ/বোনা আমন",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "পাট",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "ভুট্টা",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "তিল/গ্রীষ্মকালীন শাক সবজী",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "তুলা",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "আদা/কচু",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "মৎস্যচাষ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "চিংড়ি চাষ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "একুয়াকালচার",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "রেণু উৎপাদন",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "লবণ চাষ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "কলাচাষ ও বিবিধ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ],
                                         [
                                           "শস্যগুদাম ও বাজারজাতকরণ",
                                           textContainer(
-                                              "this leads to nothing", "")
+                                              "this led to nothing or to a PDF file in the previous application",
+                                              "")
                                         ]
                                       ])
                                     ]
@@ -373,51 +464,75 @@ class _NavDrawerState extends State<NavDrawer> {
                                   listContainer([
                                     [
                                       "হালের বলদ/গ্রামীন যানবাহন",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "ফল ও অন্যান্য অর্থকরী ফসলের বাগান/পানবরজ/মিশ্র খামার",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "রেশম চাষ",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "স্বনির্ভর ঋণ কর্মসূচী/শিক্ষিত বেকার যুবক উন্নয়ন কর্মসূচী",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "সেচ যন্ত্রপাতি",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "পুকুরে মৎস্য চাষ",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "চিংড়ি চাষ (প্রকল্প আকারে)",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "সামুদ্রিক মৎস্য চাষ",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "আর্থ-সামাজিক কার্যাবল-আইফাদ আর, এফ, পি/স্বনির্ভর ঋণ কর্মসূচী ",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "কৃষি যন্ত্রপাতি/খামার যন্ত্রপাতি ",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "গাভী পালন/হাঁস-মুরগী পালন/ছাগল পালন/গরু মোটাতাজাকরণ/হাঁসের খামার",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "কুটির শিল্প/তাঁত শিল্প/পল্লী বিদ্যুতায়ন",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ]
                                   ])
                                 ],
@@ -427,25 +542,49 @@ class _NavDrawerState extends State<NavDrawer> {
                                     [
                                       "কৃষি ভিত্তক শিল্প",
                                       listContainer([
-                                        ["দুগ্ধ খামার"],
-                                        ["গবাদী পশুর খামার"],
-                                        ["হাঁস-মুরগী পালন/খামার"],
-                                        ["মৎস্য খামার"],
-                                        ["ফলের বাগান"],
-                                        ["ছোট আকারের কৃষি যন্ত্রপাতি উৎপাদন "]
+                                        [
+                                          "দুগ্ধ খামার",
+                                          "this led to nothing or to a PDF file in the previous application"
+                                        ],
+                                        [
+                                          "গবাদী পশুর খামার",
+                                          "this led to nothing or to a PDF file in the previous application"
+                                        ],
+                                        [
+                                          "হাঁস-মুরগী পালন/খামার",
+                                          "this led to nothing or to a PDF file in the previous application"
+                                        ],
+                                        [
+                                          "মৎস্য খামার",
+                                          "this led to nothing or to a PDF file in the previous application"
+                                        ],
+                                        [
+                                          "ফলের বাগান",
+                                          "this led to nothing or to a PDF file in the previous application"
+                                        ],
+                                        [
+                                          "ছোট আকারের কৃষি যন্ত্রপাতি উৎপাদন ",
+                                          "this led to nothing or to a PDF file in the previous application"
+                                        ]
                                       ])
                                     ],
                                     [
                                       "চা বাগান উন্নয়ন",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "রাবার চাষ",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "প্রকল্প ঋণ",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ]
                                   ])
                                 ],
@@ -454,19 +593,27 @@ class _NavDrawerState extends State<NavDrawer> {
                                   listContainer([
                                     [
                                       "আমানতের বিপরীতে ঋণ ",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "কনজ্যুমার ঋণ",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "গ্রীণ ব্যাংকিং",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "এসএমই ঋণ",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ]
                                   ])
                                 ],
@@ -475,19 +622,27 @@ class _NavDrawerState extends State<NavDrawer> {
                                   listContainer([
                                     [
                                       "এলটিআর",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "পি এ ডি(বিল অব এক্সচেঞ্জ)",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "আইবিপি",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "প্যাকিং/ক্রেডিট",
-                                      textContainer("this leads to nothing", "")
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ]
                                   ])
                                 ]
@@ -498,27 +653,39 @@ class _NavDrawerState extends State<NavDrawer> {
                               listContainer([
                                 [
                                   "শস্য (সাধারণ)",
-                                  textContainer("this leads to nothing", "")
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "শস্য (আবর্তনশীল)",
-                                  textContainer("this leads to nothing", "")
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "শস্য (বন্ধকী)",
-                                  textContainer("this leads to nothing", "")
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "চলতি মুলধন/নগদ ",
-                                  textContainer("this leads to nothing", "")
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "প্রকল্প ঋণ",
-                                  textContainer("this leads to nothing", "")
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "এসএমই(SME)",
-                                  textContainer("this leads to nothing", "")
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ]
                               ])
                             ]
@@ -535,48 +702,68 @@ class _NavDrawerState extends State<NavDrawer> {
                       builder: (context) => menuContainer([
                             [
                               "সঞ্চয়ী আমানত হিসাব",
-                              textContainer("this leads to nothing", "")
+                              textContainer(
+                                  "this led to nothing or to a PDF file in the previous application",
+                                  "")
                             ],
                             [
                               "চলতি আমানত হিসাব",
-                              textContainer("this leads to nothing", "")
+                              textContainer(
+                                  "this led to nothing or to a PDF file in the previous application",
+                                  "")
                             ],
                             [
                               "স্থায়ী আমানত হিসাব",
-                              textContainer("this leads to nothing", "")
+                              textContainer(
+                                  "this led to nothing or to a PDF file in the previous application",
+                                  "")
                             ],
                             [
                               "স্পেশাল নোটিশ ডিপোজিট",
-                              textContainer("this leads to nothing", "")
+                              textContainer(
+                                  "this led to nothing or to a PDF file in the previous application",
+                                  "")
                             ],
                             [
                               "মাসিক সঞ্চয়ী স্কীম",
-                              textContainer("this leads to nothing", "")
+                              textContainer(
+                                  "this led to nothing or to a PDF file in the previous application",
+                                  "")
                             ],
                             [
                               "প্রয়োজনীয় কাগজপত্র",
                               listContainer([
                                 [
                                   "আবেদনকারীর জাতীয় পরিচয়পত্রের ফটোকপি",
-                                  textContainer("this leads to nothing", "")
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "আবেদনকারীর ২ কপি পাসপোর্ট  সাইজ ছবি",
-                                  textContainer("this leads to nothing", "")
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "নমিনীর জাতীয় পরিচয় পত্রের ফটোকপি ও ছবি",
-                                  textContainer("this leads to nothing", "")
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "ট্রেড লাইসেন্স (প্রতিষ্ঠানের ক্ষেত্রে)",
-                                  textContainer("this leads to nothing", "")
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ]
                               ])
                             ],
                             [
                               "হিসাব খোলার ফরম",
-                              textContainer("this leads to nothing", "")
+                              textContainer(
+                                  "this led to nothing or to a PDF file in the previous application",
+                                  "")
                             ]
                           ]))),
             },
