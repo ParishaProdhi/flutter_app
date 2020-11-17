@@ -54,7 +54,6 @@ flutter:
     - assets/json/divisions.json
     - assets/json/unions.json
     - assets/json/upazillas.json
-    - assets/json/crop_loan_calender.pdf
 
   #   - images/a_dot_ham.jpeg
 

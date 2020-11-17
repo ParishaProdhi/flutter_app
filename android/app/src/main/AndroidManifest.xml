@@ -13,7 +13,8 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="বিকেবি মুঠো"
         android:icon="@mipmap/ic_launcher"
-        android:versionName="primary">
+        android:versionName="primary"
+        android:requestLegacyExternalStorage="true">
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDOBlLdiPsNcNvCmSGyVG58Djagv39pOis"/>
         <activity
