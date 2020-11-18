@@ -16,9 +16,12 @@ class _pdfContainerState extends State<pdfContainer> {
   int _currentPage = 0;
   bool pdfReady = false;
   PDFViewController _pdfViewController;
-
   _pdfContainerState(String path);
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

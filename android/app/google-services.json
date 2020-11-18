@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "116001135121",
+    "firebase_url": "https://loandepositinfo.firebaseio.com",
+    "project_id": "loandepositinfo",
+    "storage_bucket": "loandepositinfo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:116001135121:android:8aeef3e68fbd0ff1936fb0",
+        "android_client_info": {
+          "package_name": "com.example.flutter_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "116001135121-u1o8kdrqg0cakc4a6g98rhmc1eglbeli.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMnwcHxAoOVZ1SYoLKQHPfoVyyloQz6gc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "116001135121-u1o8kdrqg0cakc4a6g98rhmc1eglbeli.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

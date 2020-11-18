@@ -1,14 +1,15 @@
-import 'dart:io' as io;
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/widgets/docs.dart';
 import 'package:flutter_app/widgets/home.dart';
 import 'package:flutter_app/widgets/pdfContainer.dart';
 import 'package:flutter_app/widgets/textContainer.dart';
-import 'package:path_provider/path_provider.dart';
 import 'listContainer.dart';
 import 'menuContainer.dart';
+import 'package:path_provider/path_provider.dart';
 
 var id;
 
@@ -17,107 +18,41 @@ class NavDrawer extends StatefulWidget {
 }
 
 class _NavDrawerState extends State<NavDrawer> {
-  String cropLoanCalenderPath = "", cropLoanCalenderUrl = "https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fdocuments%2Fcrop_loan_calender.pdf?alt=media&token=156a584c-a5b6-4c9f-99f4-28941281e041",
-      documentsRequiredForCurrentOrInterestLoanPath = "",documentsRequiredForCurrentOrInterestLoanUrl = "https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fdocuments%2Fdocuments_required_for_current_or_interest_loan.pdf?alt=media&token=19938dd4-570b-43ce-a444-0f5bc6546541",
-      documentsRequiredForSmePath = "",documentsRequiredForSmeUrl = "https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fdocuments%2Fdocuments_required_for_sme.pdf?alt=media&token=1d89e4bb-de1a-4e9d-9095-cf2353f2517d",
-      formForCropLoanPath = "",formForCropLoanUrl = "https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fdocuments%2Fform_for_crop_loan.pdf?alt=media&token=0f1ecbcb-476f-40d4-9251-716a01232bc0",
-      formForCurrentCropLoanPath = "",formForCurrentCropLoanUrl = "https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fdocuments%2Fform_for_current_crop_loan.pdf?alt=media&token=d05f8d80-71f6-4906-90d1-65b824638cfe",
-      formForCurrentInterestLoanPath = "",formForCurrentInterestLoanUrl = "https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fdocuments%2Fform_for_current_interest_loan.pdf?alt=media&token=900c3fc8-ff41-4b10-8dd5-1ca7e495e18f",
-      formForMortgagedCropLoanPath = "",formForMortgagedCropLoanUrl = "https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fdocuments%2Fform_for_mortgaged_crop_loan.pdf?alt=media&token=a1384672-0393-4cd6-b7b4-290d34b385c5",
-      formForProjectLoanPath = "",formForProjectLoanUrl = "https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fdocuments%2Fform_for_project_loan.pdf?alt=media&token=0cfed417-3501-473b-9177-de58002b410c",
-      formForSmeLoanPath = "",formForSmeLoanUrl = "https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fdocuments%2Fform_for_sme_loan.pdf?alt=media&token=32a125d1-ffc2-4d20-a70b-e07a8a00036d",
-      loanInterestRatePath = "", loanInterestRateUrl = "https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fdocuments%2Floan_interest_rate.pdf?alt=media&token=222a478e-6288-4ee7-aa9f-d6665ab22e61",
-      otherLoansInterestRatePath = "",otherLoansInterestRateUrl = "https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fdocuments%2Fother_loans_interest_rate.pdf?alt=media&token=00f10e7d-fe10-4f4a-bdae-7d50aa9c88a9",
-      rulesForLoanPath = "",  rulesForLoanUrl = "https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fdocuments%2Frules_for_loan.pdf?alt=media&token=034aaf9b-dfe2-4ec8-b77e-3c8236f5c0aa",
-      smeLoanPath = "", smeLoanUrl = "https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fdocuments%2Fsme_loan.pdf?alt=media&token=0132e253-9336-4e8f-83cb-0451ea416402";
-
-  String assetPDFPath = "";
+  String path = "";
   var a;
   void initState() {
     super.initState();
     a = new Image.network(
         'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2FbkbIcon.png?alt=media&token=887885bd-fc97-4187-af91-b39ec0f35d2a',
         fit: BoxFit.cover);
-    getFileFromUrl(cropLoanCalenderUrl).then((f) {
-      setState(() {
-        cropLoanCalenderPath = f.path;
-      });
-    });
-    getFileFromUrl(documentsRequiredForCurrentOrInterestLoanUrl).then((f) {
-      setState(() {
-        documentsRequiredForCurrentOrInterestLoanPath = f.path;
-      });
-    });
-    getFileFromUrl(documentsRequiredForSmeUrl).then((f) {
-      setState(() {
-        documentsRequiredForSmePath = f.path;
-      });
-    });
-    getFileFromUrl(formForCropLoanUrl).then((f) {
-      setState(() {
-        formForCropLoanPath = f.path;
-      });
-    });
-    getFileFromUrl(formForCurrentCropLoanUrl).then((f) {
-      setState(() {
-        formForCurrentCropLoanPath = f.path;
-      });
-    });
-    getFileFromUrl(formForCurrentInterestLoanUrl).then((f) {
-      setState(() {
-        formForCurrentInterestLoanPath = f.path;
-      });
-    });
-    getFileFromUrl(formForMortgagedCropLoanUrl).then((f) {
-      setState(() {
-        formForMortgagedCropLoanPath = f.path;
-      });
-    });
-    getFileFromUrl(formForProjectLoanUrl).then((f) {
-      setState(() {
-        formForProjectLoanPath = f.path;
-      });
-    });
-    getFileFromUrl(formForSmeLoanUrl).then((f) {
-      setState(() {
-        formForSmeLoanPath = f.path;
-      });
-    });
-    getFileFromUrl(loanInterestRateUrl).then((f) {
-      setState(() {
-        loanInterestRatePath = f.path;
-      });
-    });
-    getFileFromUrl(otherLoansInterestRateUrl).then((f) {
-      setState(() {
-        otherLoansInterestRatePath = f.path;
-      });
-    });
-    getFileFromUrl(rulesForLoanUrl).then((f) {
-      setState(() {
-        rulesForLoanPath = f.path;
-      });
-    });
-    getFileFromUrl(smeLoanUrl).then((f) {
-      setState(() {
-        smeLoanPath = f.path;
-      });
-    });
+    initializeFlutterFire();
+  }
+  bool _initialized = false;
+  bool _error = false;
 
+  void initializeFlutterFire() async {
+    print("I am hit!");
+    try {
+      await Firebase.initializeApp();
+      setState(() {
+        _initialized = true;
+      });
+    } catch(e) {
+      setState(() {
+        _error = true;
+      });
+    }
   }
 
-  Future<io.File> getFileFromUrl(String url) async {
-    try {
-      var data = await http.get(url);
-      var bytes = data.bodyBytes;
-      var dir = await getApplicationDocumentsDirectory();
-      io.File file = io.File("${dir.path}/mypdf.pdf");
-
-      io.File urlFile = await file.writeAsBytes(bytes);
-      return urlFile;
-    } catch (e) {
-      throw Exception("Error opening file");
-    }
+  Future<void> downloadFileExample() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    File downloadToFile = File('${appDocDir.path}/mypdf.pdf');
+    await firebase_storage.FirebaseStorage.instance
+          .ref('assets/documents/crop_loan_calender.pdf')
+          .writeToFile(downloadToFile);
+    setState(() {
+      path = downloadToFile.path;
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -140,11 +75,13 @@ class _NavDrawerState extends State<NavDrawer> {
             leading: Icon(Icons.article_outlined),
             title: Text('সিটিজেন চার্টার'),
             onTap: () => {
+              downloadFileExample(),
+              // downloadFileExample('assets/documents/documents_required_for_current_or_interest_loan.pdf'),
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          textContainer(texts[0][0], texts[0][1])))
+                          pdfContainer(path: path)))
             },
           ),
           ListTile(
@@ -168,27 +105,36 @@ class _NavDrawerState extends State<NavDrawer> {
                                 ],
                                 [
                                   "ফসল ঋণ বিতরন পঞ্জিকা",
-                                  pdfContainer(path: cropLoanCalenderPath)
-                                  // textContainer(
-                                  //     "this led to nothing or to a PDF file in the previous application",
-                                  //     "")
+                                  // pdfContainer(path: cropLoanCalenderPath)
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "ঋণের সুদ",
                                   listContainer([
                                     [
                                       "ঋণের সুদের হার (শস্য)",
-                                      pdfContainer(path: loanInterestRatePath)
+                                      // pdfContainer(path: loanInterestRatePath)
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "ঋণের সুদের হার (অন্যান্য)",
-                                      pdfContainer(path: otherLoansInterestRatePath)
+                                      // pdfContainer(path: otherLoansInterestRatePath)
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ]
                                   ])
                                 ],
                                 [
                                   "ঋণের নিয়মাচার",
-                                  pdfContainer(path: rulesForLoanPath)
+                                  // pdfContainer(path: rulesForLoanPath)
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ]
                               ])
                             ],
@@ -208,11 +154,17 @@ class _NavDrawerState extends State<NavDrawer> {
                                   listContainer([
                                     [
                                       "SME ঋণ প্রয়োজনীয় কাগজপত্র",
-                                      pdfContainer(path: documentsRequiredForSmePath)
+                                      // pdfContainer(path: documentsRequiredForSmePath)
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ],
                                     [
                                       "প্রকল্প ঋণ /চলতি মুলধন ঋণ/চলতি মুলধন ঋণ প্রয়োজনীয় কাগজপত্র",
-                                      pdfContainer(path: documentsRequiredForCurrentOrInterestLoanPath)
+                                      // pdfContainer(path: documentsRequiredForCurrentOrInterestLoanPath)
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ]
                                   ])
                                 ]
@@ -675,7 +627,10 @@ class _NavDrawerState extends State<NavDrawer> {
                                     ],
                                     [
                                       "এসএমই ঋণ",
-                                      pdfContainer(path: smeLoanPath)
+                                      // pdfContainer(path: smeLoanPath)
+                                      textContainer(
+                                          "this led to nothing or to a PDF file in the previous application",
+                                          "")
                                     ]
                                   ])
                                 ],
@@ -715,27 +670,45 @@ class _NavDrawerState extends State<NavDrawer> {
                               listContainer([
                                 [
                                   "শস্য (সাধারণ)",
-                                  pdfContainer(path: formForCropLoanPath)
+                                  // pdfContainer(path: formForCropLoanPath)
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "শস্য (আবর্তনশীল)",
-                                  pdfContainer(path: formForCurrentCropLoanPath)
+                                  // pdfContainer(path: formForCurrentCropLoanPath)
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "শস্য (বন্ধকী)",
-                                  pdfContainer(path: formForMortgagedCropLoanPath)
+                                  // pdfContainer(path: formForMortgagedCropLoanPath)
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "চলতি মুলধন/নগদ ",
-                                  pdfContainer(path: formForCurrentInterestLoanPath)
+                                  // pdfContainer(path: formForCurrentInterestLoanPath)
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "প্রকল্প ঋণ",
-                                  pdfContainer(path: formForProjectLoanPath)
+                                  // pdfContainer(path: formForProjectLoanPath)
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ],
                                 [
                                   "এসএমই(SME)",
-                                  pdfContainer(path: formForSmeLoanPath)
+                                  // pdfContainer(path: formForSmeLoanPath)
+                                  textContainer(
+                                      "this led to nothing or to a PDF file in the previous application",
+                                      "")
                                 ]
                               ])
                             ]
