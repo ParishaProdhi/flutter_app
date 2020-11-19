@@ -37,11 +37,9 @@ class _listContainerState extends State<listContainer> {
             body: Container(
               alignment: Alignment.center,
               padding: EdgeInsets.fromLTRB(40, 20, 40, 0),
-              // alignment: Alignment.center,
               child: ListView.builder(
                   itemCount: widget.menu.length,
                   itemBuilder: (BuildContext context, int index) {
-                    //return Text(widget.menu[index]);
                     return SingleChildScrollView(
                         padding: EdgeInsets.all(10),
                         child: Column(
@@ -64,7 +62,6 @@ class _listContainerState extends State<listContainer> {
                                             builder: (context) =>
                                                 widget.menu[index][1]),
                                       );
-                                      // print('You tapped on RaisedButton');
                                     },
                                   ),
                                 )),

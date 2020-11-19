@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
@@ -68,15 +66,11 @@ class _pdfContainerState extends State<pdfContainer> {
         children: <Widget>[
           _currentPage > 0
               ? FloatingActionButton.extended(
-
-            // label: ,Icon(icons.)
-            // label: Text("Go to ${_currentPage - 1}"),
             onPressed: () {
               _currentPage -= 1;
               _pdfViewController.setPage(_currentPage);
             },
             label: Icon(Icons.arrow_back_ios,),
-            // backgroundColor: Colors.blue,
           )
               : Offstage(),
           _currentPage+1 < _totalPages

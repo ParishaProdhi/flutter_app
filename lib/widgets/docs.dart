@@ -1,4 +1,3 @@
-// import 'package:flutter_app/widgets/textContainer.dart';
 List texts = [
   [
     "বিকেবি সিটিজেন চার্টার",

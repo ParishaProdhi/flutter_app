@@ -12,8 +12,8 @@ class home extends StatefulWidget {
 class _homeState extends State<home> {
   var a;
   void initState() {
-    a = NetworkImage(
-        'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fback.jpg?alt=media&token=12c57aa2-3d6e-4ff8-91fb-2a951cc5ab3d');
+    // a = NetworkImage(
+    //     'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fback.jpg?alt=media&token=12c57aa2-3d6e-4ff8-91fb-2a951cc5ab3d');
     super.initState();
   }
 
@@ -21,10 +21,12 @@ class _homeState extends State<home> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(
-        image: a,
-        fit: BoxFit.fill,
-      )),
+        color: Colors.lightBlueAccent
+      //     image: DecorationImage(
+      //   image: a,
+      //   fit: BoxFit.fill,
+      // )
+      ),
       child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(

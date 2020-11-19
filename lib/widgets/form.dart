@@ -100,7 +100,7 @@ class _FormPageState extends State<FormPage> {
         ? this.dep_scheme_type
         : "not_applicable";
     final response =
-        await http.post("https://05222a42351a.ngrok.io/post", body: {
+        await http.post("https://0a1be3f267e1.ngrok.io/post", body: {
       "name": this.name,
       "phone": this.phone,
       "nid": this.nid,
@@ -130,30 +130,7 @@ class _FormPageState extends State<FormPage> {
     }
   }
 
-  // Future<void> _getDivisionList() async {
-  //   await rootBundle
-  //       .loadString("assets/json/divisions.json")
-  //       .then((responseDiv) {
-  //     var dataReg = json.decode(responseDiv);
-  //
-  //     setState(() {
-  //       divisionList = dataReg;
-  //     });
-  //   });
-  // }
-
   Future<void> _getDivisionList() async {
-    // String url =
-    //     'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fjson%2Fdivisions.json?alt=media&token=4b506781-3ca6-4ea8-a8f2-a333ff360a28';
-    // final response = await http.get(url);
-    // var dataReg;
-    // if (200 == response.statusCode) {
-    //   dataReg = json.decode(response.body);
-    // }
-    // setState(() {
-    //   divisionList = dataReg;
-    // });
-    //--
     await rootBundle
         .loadString("assets/json/divisions.json")
         .then((responseDiv) {
@@ -166,22 +143,6 @@ class _FormPageState extends State<FormPage> {
   }
 
   Future<void> _getDistrictList(String _division) async {
-    // String url =
-    //     'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fjson%2Fdistricts.json?alt=media&token=88338ff8-7909-4fb5-8ce0-4a7f0115c5e8';
-    // var response = await http.get(url);
-    // var dataDis = json.decode(response.body);
-    // var appropriateDataDis = [];
-    // appropriateDataDis.add(dataDis[0]);
-    // int i;
-    // for (i = 1; i < dataDis.length; i++) {
-    //   if (dataDis[i]["division_id"] == _division) {
-    //     appropriateDataDis.add(dataDis[i]);
-    //   }
-    // }
-    // setState(() {
-    //   districtList = appropriateDataDis;
-    // });
-    //---
     await rootBundle
         .loadString("assets/json/districts.json")
         .then((responseDis) {
@@ -201,22 +162,6 @@ class _FormPageState extends State<FormPage> {
   }
 
   Future<void> _getUpazillaList(String _district) async {
-    // String url =
-    //     'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fjson%2Fupazillas.json?alt=media&token=2a3f9079-5379-40ee-b21b-8b486ec8d4ba';
-    // var response = await http.get(url);
-    // var dataUpa = json.decode(response.body);
-    // var appropriateDataUpa = [];
-    // appropriateDataUpa.add(dataUpa[0]);
-    // int i;
-    // for (i = 1; i < dataUpa.length; i++) {
-    //   if (dataUpa[i]["district_id"] == _district) {
-    //     appropriateDataUpa.add(dataUpa[i]);
-    //   }
-    // }
-    // setState(() {
-    //   upazillaList = appropriateDataUpa;
-    // });
-//---
     await rootBundle
         .loadString("assets/json/upazillas.json")
         .then((responseUpa) {
@@ -236,23 +181,6 @@ class _FormPageState extends State<FormPage> {
   }
 
   Future<void> _getUnionList(String _upazilla) async {
-    // String url =
-    //     'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fjson%2Funions.json?alt=media&token=d4ba259a-85e7-4734-bf2e-7c8f82f2fc63';
-    // var response = await http.get(url);
-    // var dataUni = json.decode(response.body);
-    // var appropriateDataUni = [];
-    // appropriateDataUni.add(dataUni[0]);
-    // int i;
-    // for (i = 1; i < dataUni.length; i++) {
-    //   if (dataUni[i]["upazilla_id"] == _upazilla) {
-    //     appropriateDataUni.add(dataUni[i]);
-    //   }
-    // }
-    // setState(() {
-    //   unionList = appropriateDataUni;
-    // });
-    //----
-
     await rootBundle.loadString("assets/json/unions.json").then((responseUni) {
       var dataUni = json.decode(responseUni);
       var appropriateDataUni = [];
@@ -563,10 +491,12 @@ class _FormPageState extends State<FormPage> {
     bday = '';
     return Container(
         decoration: BoxDecoration(
-            image: DecorationImage(
-          image: a,
-          fit: BoxFit.fill,
-        )),
+            color: Colors.white
+        //     image: DecorationImage(
+        //   image: a,
+        //   fit: BoxFit.fill,
+        // )
+        ),
         child: Scaffold(
           key: _scaffoldKey,
           backgroundColor: Colors.transparent,

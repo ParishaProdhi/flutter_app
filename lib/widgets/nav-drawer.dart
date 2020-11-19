@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_core/firebase_core.dart';
@@ -18,7 +19,7 @@ class NavDrawer extends StatefulWidget {
 }
 
 class _NavDrawerState extends State<NavDrawer> {
-  String path = "";
+  List<String> path = ["", "", "", "", "", "", "", "", "", "", "", "", ""];
   var a;
   void initState() {
     super.initState();
@@ -26,6 +27,19 @@ class _NavDrawerState extends State<NavDrawer> {
         'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2FbkbIcon.png?alt=media&token=887885bd-fc97-4187-af91-b39ec0f35d2a',
         fit: BoxFit.cover);
     initializeFlutterFire();
+    downloadFileExample('assets/documents/crop_loan_calender.pdf', 0);
+    downloadFileExample('assets/documents/loan_interest_rate.pdf', 1);
+    downloadFileExample('assets/documents/other_loans_interest_rate.pdf', 2);
+    downloadFileExample('assets/documents/rules_for_loan.pdf', 3);
+    downloadFileExample('assets/documents/documents_required_for_sme.pdf', 4);
+    downloadFileExample('assets/documents/documents_required_for_current_or_interest_loan.pdf', 5);
+    downloadFileExample('assets/documents/sme_loan.pdf', 6);
+    downloadFileExample('assets/documents/form_for_crop_loan.pdf', 7);
+    downloadFileExample('assets/documents/form_for_current_crop_loan.pdf', 8);
+    downloadFileExample('assets/documents/form_for_mortgaged_crop_loan.pdf', 9);
+    downloadFileExample('assets/documents/form_for_current_interest_loan.pdf', 10);
+    downloadFileExample('assets/documents/form_for_project_loan.pdf', 11);
+    downloadFileExample('assets/documents/form_for_sme_loan.pdf', 12);
   }
   bool _initialized = false;
   bool _error = false;
@@ -44,14 +58,26 @@ class _NavDrawerState extends State<NavDrawer> {
     }
   }
 
-  Future<void> downloadFileExample() async {
+  Future<void> downloadFileExample(String reference, int index) async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    File downloadToFile = File('${appDocDir.path}/mypdf.pdf');
-    await firebase_storage.FirebaseStorage.instance
-          .ref('assets/documents/crop_loan_calender.pdf')
-          .writeToFile(downloadToFile);
+    // print("received the directory $appDocDir in $index");
+    File downloadToFile = File('${appDocDir.path}/mypdf_$index.pdf');
+    if(downloadToFile == null){
+      // print("the file was not null");
+      // print(downloadToFile);
+      // downloadToFile.delete();
+      try{
+        await firebase_storage.FirebaseStorage.instance
+            .ref(reference)
+            .writeToFile(downloadToFile);
+      }
+      on Exception catch(_){
+        print("never reached");
+      }
+    }
+
     setState(() {
-      path = downloadToFile.path;
+      path[index] = downloadToFile.path;
     });
   }
   @override
@@ -75,13 +101,11 @@ class _NavDrawerState extends State<NavDrawer> {
             leading: Icon(Icons.article_outlined),
             title: Text('সিটিজেন চার্টার'),
             onTap: () => {
-              downloadFileExample(),
-              // downloadFileExample('assets/documents/documents_required_for_current_or_interest_loan.pdf'),
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          pdfContainer(path: path)))
+                          textContainer(texts[0][0], texts[0][1])))
             },
           ),
           ListTile(
@@ -105,36 +129,27 @@ class _NavDrawerState extends State<NavDrawer> {
                                 ],
                                 [
                                   "ফসল ঋণ বিতরন পঞ্জিকা",
-                                  // pdfContainer(path: cropLoanCalenderPath)
-                                  textContainer(
-                                      "this led to nothing or to a PDF file in the previous application",
-                                      "")
+                                  pdfContainer(path: path[0])
+                                  // textContainer(
+                                  //     "this led to nothing or to a PDF file in the previous application",
+                                  //     "")
                                 ],
                                 [
                                   "ঋণের সুদ",
                                   listContainer([
                                     [
                                       "ঋণের সুদের হার (শস্য)",
-                                      // pdfContainer(path: loanInterestRatePath)
-                                      textContainer(
-                                          "this led to nothing or to a PDF file in the previous application",
-                                          "")
+                                      pdfContainer(path: path[1])
                                     ],
                                     [
                                       "ঋণের সুদের হার (অন্যান্য)",
-                                      // pdfContainer(path: otherLoansInterestRatePath)
-                                      textContainer(
-                                          "this led to nothing or to a PDF file in the previous application",
-                                          "")
+                                      pdfContainer(path: path[2])
                                     ]
                                   ])
                                 ],
                                 [
                                   "ঋণের নিয়মাচার",
-                                  // pdfContainer(path: rulesForLoanPath)
-                                  textContainer(
-                                      "this led to nothing or to a PDF file in the previous application",
-                                      "")
+                                  pdfContainer(path: path[3])
                                 ]
                               ])
                             ],
@@ -154,17 +169,11 @@ class _NavDrawerState extends State<NavDrawer> {
                                   listContainer([
                                     [
                                       "SME ঋণ প্রয়োজনীয় কাগজপত্র",
-                                      // pdfContainer(path: documentsRequiredForSmePath)
-                                      textContainer(
-                                          "this led to nothing or to a PDF file in the previous application",
-                                          "")
+                                      pdfContainer(path: path[4])
                                     ],
                                     [
                                       "প্রকল্প ঋণ /চলতি মুলধন ঋণ/চলতি মুলধন ঋণ প্রয়োজনীয় কাগজপত্র",
-                                      // pdfContainer(path: documentsRequiredForCurrentOrInterestLoanPath)
-                                      textContainer(
-                                          "this led to nothing or to a PDF file in the previous application",
-                                          "")
+                                      pdfContainer(path: path[5])
                                     ]
                                   ])
                                 ]
@@ -627,10 +636,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                     ],
                                     [
                                       "এসএমই ঋণ",
-                                      // pdfContainer(path: smeLoanPath)
-                                      textContainer(
-                                          "this led to nothing or to a PDF file in the previous application",
-                                          "")
+                                      pdfContainer(path: path[6])
                                     ]
                                   ])
                                 ],
@@ -670,45 +676,27 @@ class _NavDrawerState extends State<NavDrawer> {
                               listContainer([
                                 [
                                   "শস্য (সাধারণ)",
-                                  // pdfContainer(path: formForCropLoanPath)
-                                  textContainer(
-                                      "this led to nothing or to a PDF file in the previous application",
-                                      "")
+                                  pdfContainer(path: path[7])
                                 ],
                                 [
                                   "শস্য (আবর্তনশীল)",
-                                  // pdfContainer(path: formForCurrentCropLoanPath)
-                                  textContainer(
-                                      "this led to nothing or to a PDF file in the previous application",
-                                      "")
+                                  pdfContainer(path: path[8])
                                 ],
                                 [
                                   "শস্য (বন্ধকী)",
-                                  // pdfContainer(path: formForMortgagedCropLoanPath)
-                                  textContainer(
-                                      "this led to nothing or to a PDF file in the previous application",
-                                      "")
+                                  pdfContainer(path: path[9])
                                 ],
                                 [
                                   "চলতি মুলধন/নগদ ",
-                                  // pdfContainer(path: formForCurrentInterestLoanPath)
-                                  textContainer(
-                                      "this led to nothing or to a PDF file in the previous application",
-                                      "")
+                                  pdfContainer(path: path[10])
                                 ],
                                 [
                                   "প্রকল্প ঋণ",
-                                  // pdfContainer(path: formForProjectLoanPath)
-                                  textContainer(
-                                      "this led to nothing or to a PDF file in the previous application",
-                                      "")
+                                  pdfContainer(path: path[11])
                                 ],
                                 [
                                   "এসএমই(SME)",
-                                  // pdfContainer(path: formForSmeLoanPath)
-                                  textContainer(
-                                      "this led to nothing or to a PDF file in the previous application",
-                                      "")
+                                  pdfContainer(path: path[12])
                                 ]
                               ])
                             ]
