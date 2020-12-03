@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/accountOpeningWidgets/basicPage.dart';
 
 import 'form.dart';
 import 'nav-drawer.dart';
@@ -12,8 +13,7 @@ class home extends StatefulWidget {
 class _homeState extends State<home> {
   var a;
   void initState() {
-    // a = NetworkImage(
-    //     'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fback.jpg?alt=media&token=12c57aa2-3d6e-4ff8-91fb-2a951cc5ab3d');
+    a = AssetImage('assets/images/back.jpg');
     super.initState();
   }
 
@@ -21,11 +21,11 @@ class _homeState extends State<home> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.lightBlueAccent
-      //     image: DecorationImage(
-      //   image: a,
-      //   fit: BoxFit.fill,
-      // )
+        // color: Colors.white
+          image: DecorationImage(
+        image: a,
+        fit: BoxFit.fill,
+      )
       ),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -92,6 +92,25 @@ class _homeState extends State<home> {
                     },
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                // Container(
+                //   height: 50,
+                //   width: 300,
+                //   child: RaisedButton(
+                //     color: Colors.orange,
+                //     child: Text(
+                //       'হিসাব খোলার আবেদন',
+                //       textAlign: TextAlign.justify,
+                //       style: TextStyle(fontSize: 20),
+                //     ),
+                //     onPressed: () {
+                //       Navigator.push(context,
+                //           MaterialPageRoute(builder: (context) => accountOpening()));
+                //     },
+                //   ),
+                // ),
               ],
             ),
           )),

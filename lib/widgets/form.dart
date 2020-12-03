@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
+import 'package:sms/sms.dart';
 
 class FormPage extends StatefulWidget {
   @override
@@ -43,8 +46,7 @@ class _FormPageState extends State<FormPage> {
   String _division = '0', _district = '0', _upazilla = '0', _union = '0';
   var a;
   void initState() {
-    a = NetworkImage(
-        'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2Fback.jpg?alt=media&token=12c57aa2-3d6e-4ff8-91fb-2a951cc5ab3d');
+    a = AssetImage('assets/images/back.jpg');
     _getDivisionList();
     super.initState();
   }
@@ -65,7 +67,8 @@ class _FormPageState extends State<FormPage> {
       ..from = Address(username, 'Bangladesh Krishi Bank')
       ..recipients.add('prodhi18@gmail.com')
       ..subject = 'নিম্নোক্ত গ্রাহকের সহিত যোগাযোগ করুন'
-      ..html = "<div>"
+      ..html =
+          "<div>"
           "<div>"
           "<h1><b>${app_type == 'loan' ? 'ঋণগ্রহণে আগ্রহী' : 'আমানতপ্রদানে আগ্রহী'}</b></h1>"
           "<b>${app_type == 'loan' ? 'ঋণের ধরণঃ ' : 'আমানতের ধরণঃ '}</b>"
@@ -78,6 +81,12 @@ class _FormPageState extends State<FormPage> {
           "<b>ঠিকানাঃ </b>বিভাগ-${this.div}, জেলা-${this.dis}, উপজেলা-${this.upa}, ইউনিয়ন-${this.uni}<br>"
           "<b>লিঙ্গঃ </b>${this.gender}<br>"
           "<b>জন্মতারিখঃ </b>${this.bday}<br>"
+          "<br>"
+          "<form method='get' action='https://c5631438acf3.ngrok.io/sendSMS/${this.phone}'>"
+          "<label>গ্রাহক যে সময় পরিসরে আপনার ব্রাঞ্চে যোগাযোগ  করবেনঃ <input name='startDate' type='date'> থেকে <input name='endDate' type='date'></label>"
+          "<input type='submit' value='গ্রাহককে জানান'>"
+          "</form>"
+          "<a href='https://c5631438acf3.ngrok.io/sendSMS/${this.phone}'>Get all the applications</a>"
           "</div></div>";
 
     try {
@@ -91,6 +100,12 @@ class _FormPageState extends State<FormPage> {
     }
   }
 
+
+  sendOTP() {
+    SmsSender sender = new SmsSender();
+    sender.sendSms(new SmsMessage(
+        "+8801877424057", 'Your OTP is : '));
+  }
   Future<void> _saveToDB() async {
     var loan_type_check_null =
         (this.loan_type != null) ? this.loan_type : "not_applicable";
@@ -100,7 +115,7 @@ class _FormPageState extends State<FormPage> {
         ? this.dep_scheme_type
         : "not_applicable";
     final response =
-        await http.post("https://0a1be3f267e1.ngrok.io/post", body: {
+        await http.post("https://c5631438acf3.ngrok.io/post", body: {
       "name": this.name,
       "phone": this.phone,
       "nid": this.nid,
@@ -125,7 +140,7 @@ class _FormPageState extends State<FormPage> {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
       _showSnackBar();
-      _saveToDB();
+      // _saveToDB();
       _sendMail();
     }
   }
@@ -488,14 +503,15 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final node = FocusScope.of(context);
     bday = '';
     return Container(
         decoration: BoxDecoration(
-            color: Colors.white
-        //     image: DecorationImage(
-        //   image: a,
-        //   fit: BoxFit.fill,
-        // )
+            // color: Colors.white
+            image: DecorationImage(
+          image: a,
+          fit: BoxFit.fill,
+        )
         ),
         child: Scaffold(
           key: _scaffoldKey,
@@ -523,6 +539,8 @@ class _FormPageState extends State<FormPage> {
                         onSaved: (value) {
                           this.name = value;
                         },
+                        autofocus: true,
+                        onEditingComplete: () => node.nextFocus(), // Move focus to next
                       ),
                     ),
                     Container(
@@ -539,6 +557,7 @@ class _FormPageState extends State<FormPage> {
                         onSaved: (value) {
                           this.phone = value;
                         },
+                        onEditingComplete: () => node.nextFocus(),
                       ),
                     ),
                     Container(
@@ -557,6 +576,7 @@ class _FormPageState extends State<FormPage> {
                         onSaved: (value) {
                           this.nid = value;
                         },
+                        onEditingComplete: () => node.nextFocus(),
                       ),
                     ),
                     Row(
@@ -584,6 +604,7 @@ class _FormPageState extends State<FormPage> {
                                     _getDistrictList(_division);
                                   });
                                 },
+
                                 hint: Text('Select Division'),
                                 items: divisionList?.map((item) {
                                       return DropdownMenuItem(
@@ -598,6 +619,7 @@ class _FormPageState extends State<FormPage> {
                                       this.div = p["name"];
                                     }
                                   });
+
                                   // divisionList[int.parse(value)]['name'];
                                   // this.address += "বিভাগঃ " + this.div + ", ";
                                 },

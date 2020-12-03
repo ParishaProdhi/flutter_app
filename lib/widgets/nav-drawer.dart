@@ -23,8 +23,8 @@ class _NavDrawerState extends State<NavDrawer> {
   var a;
   void initState() {
     super.initState();
-    a = new Image.network(
-        'https://firebasestorage.googleapis.com/v0/b/loandepositinfo.appspot.com/o/assets%2FbkbIcon.png?alt=media&token=887885bd-fc97-4187-af91-b39ec0f35d2a',
+    a = new Image.asset(
+        'assets/images/bkbIcon.png',
         fit: BoxFit.cover);
     initializeFlutterFire();
     downloadFileExample('assets/documents/crop_loan_calender.pdf', 0);
