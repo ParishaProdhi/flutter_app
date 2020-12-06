@@ -62,6 +62,19 @@ flutter:
     - assets/json/upazillas.json
     - assets/images/back.jpg
     - assets/images/bkbIcon.png
+    - assets/documents/crop_loan_calender.pdf
+    - assets/documents/loan_interest_rate.pdf
+    - assets/documents/other_loans_interest_rate.pdf
+    - assets/documents/rules_for_loan.pdf
+    - assets/documents/documents_required_for_sme.pdf
+    - assets/documents/documents_required_for_current_or_interest_loan.pdf
+    - assets/documents/sme_loan.pdf
+    - assets/documents/form_for_crop_loan.pdf
+    - assets/documents/form_for_current_crop_loan.pdf
+    - assets/documents/form_for_mortgaged_crop_loan.pdf
+    - assets/documents/form_for_current_interest_loan.pdf
+    - assets/documents/form_for_project_loan.pdf
+    - assets/documents/form_for_sme_loan.pdf
 
         #   - images/a_dot_ham.jpeg
 

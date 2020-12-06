@@ -62,7 +62,12 @@ class _FormPageState extends State<FormPage> {
     String password = '2020|abc';
 
     final smtpServer = gmail(username, password);
-
+    final branch_result = await http.get('http://a62ad9b7b60f.ngrok.io/branches/getEmailAddress/${this.upa}/${this.uni}');
+    final decoded_branch_result = jsonDecode(branch_result.body);
+    final email_address = decoded_branch_result[0]["Email_address"].toString();
+    final branch_name = decoded_branch_result[0]["BRANCH_NAME"].toString();
+    print(email_address);
+    print(branch_name);
     final message = Message()
       ..from = Address(username, 'Bangladesh Krishi Bank')
       ..recipients.add('prodhi18@gmail.com')
@@ -82,11 +87,11 @@ class _FormPageState extends State<FormPage> {
           "<b>লিঙ্গঃ </b>${this.gender}<br>"
           "<b>জন্মতারিখঃ </b>${this.bday}<br>"
           "<br>"
-          "<form method='get' action='https://c5631438acf3.ngrok.io/sendSMS/${this.phone}'>"
+          "<form method='get' action='http://a62ad9b7b60f.ngrok.io/sendSMS/${this.phone}'>"
           "<label>গ্রাহক যে সময় পরিসরে আপনার ব্রাঞ্চে যোগাযোগ  করবেনঃ <input name='startDate' type='date'> থেকে <input name='endDate' type='date'></label>"
           "<input type='submit' value='গ্রাহককে জানান'>"
           "</form>"
-          "<a href='https://c5631438acf3.ngrok.io/sendSMS/${this.phone}'>Get all the applications</a>"
+          "<a href='https://a62ad9b7b60f.ngrok.io/sendSMS/${this.phone}'>Get all the applications</a>"
           "</div></div>";
 
     try {
@@ -115,7 +120,7 @@ class _FormPageState extends State<FormPage> {
         ? this.dep_scheme_type
         : "not_applicable";
     final response =
-        await http.post("https://c5631438acf3.ngrok.io/post", body: {
+        await http.post("https://a62ad9b7b60f.ngrok.io/post", body: {
       "name": this.name,
       "phone": this.phone,
       "nid": this.nid,
