@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/widgets/docs.dart';
 import 'package:flutter_app/widgets/home.dart';
 import 'package:flutter_app/widgets/pdfContainer.dart';
@@ -20,65 +19,105 @@ class NavDrawer extends StatefulWidget {
 
 class _NavDrawerState extends State<NavDrawer> {
   List<String> path = ["", "", "", "", "", "", "", "", "", "", "", "", ""];
+  String assetPDFPath = "";
   var a;
   void initState() {
     super.initState();
     a = new Image.asset(
         'assets/images/bkbIcon.png',
         fit: BoxFit.cover);
-    initializeFlutterFire();
-    downloadFileExample('assets/documents/crop_loan_calender.pdf', 0);
-    downloadFileExample('assets/documents/loan_interest_rate.pdf', 1);
-    downloadFileExample('assets/documents/other_loans_interest_rate.pdf', 2);
-    downloadFileExample('assets/documents/rules_for_loan.pdf', 3);
-    downloadFileExample('assets/documents/documents_required_for_sme.pdf', 4);
-    downloadFileExample('assets/documents/documents_required_for_current_or_interest_loan.pdf', 5);
-    downloadFileExample('assets/documents/sme_loan.pdf', 6);
-    downloadFileExample('assets/documents/form_for_crop_loan.pdf', 7);
-    downloadFileExample('assets/documents/form_for_current_crop_loan.pdf', 8);
-    downloadFileExample('assets/documents/form_for_mortgaged_crop_loan.pdf', 9);
-    downloadFileExample('assets/documents/form_for_current_interest_loan.pdf', 10);
-    downloadFileExample('assets/documents/form_for_project_loan.pdf', 11);
-    downloadFileExample('assets/documents/form_for_sme_loan.pdf', 12);
-  }
-  bool _initialized = false;
-  bool _error = false;
-
-  void initializeFlutterFire() async {
-    print("I am hit!");
-    try {
-      await Firebase.initializeApp();
+    getFileFromAsset("assets/documents/crop_loan_calender.pdf", 0).then((f) {
       setState(() {
-        _initialized = true;
+        path[0] = f.path;
+        print(path[0]);
       });
-    } catch(e) {
-      setState(() {
-        _error = true;
-      });
-    }
-  }
-
-  Future<void> downloadFileExample(String reference, int index) async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    // print("received the directory $appDocDir in $index");
-    File downloadToFile = File('${appDocDir.path}/mypdf_$index.pdf');
-    if(downloadToFile == null){
-      // print("the file was not null");
-      // print(downloadToFile);
-      // downloadToFile.delete();
-      try{
-        await firebase_storage.FirebaseStorage.instance
-            .ref(reference)
-            .writeToFile(downloadToFile);
-      }
-      on Exception catch(_){
-        print("never reached");
-      }
-    }
-
-    setState(() {
-      path[index] = downloadToFile.path;
     });
+    getFileFromAsset("assets/documents/loan_interest_rate.pdf", 1).then((f) {
+      setState(() {
+        path[1] = f.path;
+        print(path[1]);
+      });
+    });
+    getFileFromAsset("assets/documents/other_loans_interest_rate.pdf", 2).then((f) {
+      setState(() {
+        path[2] = f.path;
+        print(path[2]);
+      });
+    });
+    getFileFromAsset("assets/documents/rules_for_loan.pdf", 3).then((f) {
+      setState(() {
+        path[3] = f.path;
+        print(path[3]);
+      });
+    });
+    getFileFromAsset("assets/documents/documents_required_for_sme.pdf", 4).then((f) {
+      setState(() {
+        path[4] = f.path;
+        print(path[4]);
+      });
+    });
+    getFileFromAsset("assets/documents/documents_required_for_current_or_interest_loan.pdf", 5).then((f) {
+      setState(() {
+        path[5] = f.path;
+        print(path[5]);
+      });
+    });
+    getFileFromAsset("assets/documents/sme_loan.pdf", 6).then((f) {
+      setState(() {
+        path[6] = f.path;
+        print(path[6]);
+      });
+    });
+    getFileFromAsset("assets/documents/form_for_crop_loan.pdf", 7).then((f) {
+      setState(() {
+        path[7] = f.path;
+        print(path[7]);
+      });
+    });
+    getFileFromAsset("assets/documents/form_for_current_crop_loan.pdf", 8).then((f) {
+      setState(() {
+        path[8] = f.path;
+        print(path[8]);
+      });
+    });
+    getFileFromAsset("assets/documents/form_for_mortgaged_crop_loan.pdf", 9).then((f) {
+      setState(() {
+        path[9] = f.path;
+        print(path[9]);
+      });
+    });
+    getFileFromAsset("assets/documents/form_for_current_interest_loan.pdf", 10).then((f) {
+      setState(() {
+        path[10] = f.path;
+        print(path[10]);
+      });
+    });
+    getFileFromAsset("assets/documents/form_for_project_loan.pdf", 11).then((f) {
+      setState(() {
+        path[11] = f.path;
+        print(path[11]);
+      });
+    });
+    getFileFromAsset("assets/documents/form_for_sme_loan.pdf", 12).then((f) {
+      setState(() {
+        path[12] = f.path;
+        print(path[12]);
+      });
+    });
+
+  }
+  Future<File> getFileFromAsset(String asset, int index) async {
+    try {
+      var data = await rootBundle.load(asset);
+      var bytes = data.buffer.asUint8List();
+      var dir = await getApplicationDocumentsDirectory();
+      File file = File("${dir.path}/mypdf_$index.pdf");
+
+      File assetFile = await file.writeAsBytes(bytes);
+      return assetFile;
+    } catch (e) {
+      throw Exception("Error opening asset file");
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -130,6 +169,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                 [
                                   "ফসল ঋণ বিতরন পঞ্জিকা",
                                   pdfContainer(path: path[0])
+                                  // pdfContainer(path: path[0])
                                   // textContainer(
                                   //     "this led to nothing or to a PDF file in the previous application",
                                   //     "")

@@ -37,6 +37,7 @@ class _pdfContainerState extends State<pdfContainer> {
             nightMode: false,
             fitEachPage: true,
             pageFling: true,
+            fitPolicy: FitPolicy.WIDTH,
             onError: (e) {
               print(e);
             },

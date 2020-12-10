@@ -1,5 +1,5 @@
 //stack, positioned, sized box, expanded widget
-import 'package:camera/camera.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/widgets/home.dart';

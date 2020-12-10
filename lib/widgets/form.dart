@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
-import 'package:sms/sms.dart';
+// import 'package:sms/sms.dart';
 
 class FormPage extends StatefulWidget {
   @override
@@ -62,7 +62,7 @@ class _FormPageState extends State<FormPage> {
     String password = '2020|abc';
 
     final smtpServer = gmail(username, password);
-    final branch_result = await http.get('http://a62ad9b7b60f.ngrok.io/branches/getEmailAddress/${this.upa}/${this.uni}');
+    final branch_result = await http.get('http://b7e35dd4d94c.ngrok.io/branches/getEmailAddress/${this.uni}');
     final decoded_branch_result = jsonDecode(branch_result.body);
     final email_address = decoded_branch_result[0]["Email_address"].toString();
     final branch_name = decoded_branch_result[0]["BRANCH_NAME"].toString();
@@ -70,7 +70,7 @@ class _FormPageState extends State<FormPage> {
     print(branch_name);
     final message = Message()
       ..from = Address(username, 'Bangladesh Krishi Bank')
-      ..recipients.add('prodhi18@gmail.com')
+      ..recipients.add(email_address)
       ..subject = 'নিম্নোক্ত গ্রাহকের সহিত যোগাযোগ করুন'
       ..html =
           "<div>"
@@ -87,11 +87,10 @@ class _FormPageState extends State<FormPage> {
           "<b>লিঙ্গঃ </b>${this.gender}<br>"
           "<b>জন্মতারিখঃ </b>${this.bday}<br>"
           "<br>"
-          "<form method='get' action='http://a62ad9b7b60f.ngrok.io/sendSMS/${this.phone}'>"
+          "<form method='get' action='http://b7e35dd4d94c.ngrok.io/sendSMS/${this.phone}/$branch_name'>"
           "<label>গ্রাহক যে সময় পরিসরে আপনার ব্রাঞ্চে যোগাযোগ  করবেনঃ <input name='startDate' type='date'> থেকে <input name='endDate' type='date'></label>"
           "<input type='submit' value='গ্রাহককে জানান'>"
           "</form>"
-          "<a href='https://a62ad9b7b60f.ngrok.io/sendSMS/${this.phone}'>Get all the applications</a>"
           "</div></div>";
 
     try {
@@ -106,11 +105,11 @@ class _FormPageState extends State<FormPage> {
   }
 
 
-  sendOTP() {
-    SmsSender sender = new SmsSender();
-    sender.sendSms(new SmsMessage(
-        "+8801877424057", 'Your OTP is : '));
-  }
+  // sendOTP() {
+  //   SmsSender sender = new SmsSender();
+  //   sender.sendSms(new SmsMessage(
+  //       "+8801877424057", 'Your OTP is : '));
+  // }
   Future<void> _saveToDB() async {
     var loan_type_check_null =
         (this.loan_type != null) ? this.loan_type : "not_applicable";
@@ -120,7 +119,7 @@ class _FormPageState extends State<FormPage> {
         ? this.dep_scheme_type
         : "not_applicable";
     final response =
-        await http.post("https://a62ad9b7b60f.ngrok.io/post", body: {
+        await http.post("https://b7e35dd4d94c.ngrok.io/post", body: {
       "name": this.name,
       "phone": this.phone,
       "nid": this.nid,
@@ -145,7 +144,7 @@ class _FormPageState extends State<FormPage> {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
       _showSnackBar();
-      // _saveToDB();
+      _saveToDB();
       _sendMail();
     }
   }
@@ -521,404 +520,412 @@ class _FormPageState extends State<FormPage> {
         child: Scaffold(
           key: _scaffoldKey,
           backgroundColor: Colors.transparent,
+          resizeToAvoidBottomPadding: false,
           appBar: AppBar(
             centerTitle: true,
             title: Text("প্রাথমিক তথ্যাবলী"),
             backgroundColor: Colors.transparent,
           ),
-          body: ListView(children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
-                      child: TextFormField(
-                        // controller: nameCtrl,
-                        decoration: InputDecoration(labelText: 'নাম'),
-                        validator: (value) {
-                          if (value.isEmpty) return ("নাম প্রদান আবশ্যক");
-                        },
-                        onSaved: (value) {
-                          this.name = value;
-                        },
-                        autofocus: true,
-                        onEditingComplete: () => node.nextFocus(), // Move focus to next
+          body:
+          SingleChildScrollView(
+            
+            child: Stack(children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
+                        child: TextFormField(
+                          // controller: nameCtrl,
+                          decoration: InputDecoration(labelText: 'নাম'),
+                          validator: (value) {
+                            if (value.isEmpty) return ("নাম প্রদান আবশ্যক");
+                          },
+                          onSaved: (value) {
+                            this.name = value;
+                          },
+                          // autofocus: true,
+                          onEditingComplete: () => node.nextFocus(), // Move focus to next
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
-                      child: TextFormField(
-                        // controller: phoneCtrl,
-                        keyboardType: TextInputType.number,
-                        maxLength: 11,
-                        decoration: InputDecoration(labelText: 'যোগাযোগ'),
-                        validator: (value) {
-                          if (value.length < 11)
-                            return ("যোগাযোগের নম্বর অবশ্যই ১১ অংকের হতে হবে");
-                        },
-                        onSaved: (value) {
-                          this.phone = value;
-                        },
-                        onEditingComplete: () => node.nextFocus(),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
+                        child: TextFormField(
+                          // controller: phoneCtrl,
+                          keyboardType: TextInputType.number,
+                          maxLength: 11,
+                          decoration: InputDecoration(labelText: 'যোগাযোগ'),
+                          validator: (value) {
+                            if (value.length < 11)
+                              return ("যোগাযোগের নম্বর অবশ্যই ১১ অংকের হতে হবে");
+                          },
+                          onSaved: (value) {
+                            this.phone = value;
+                          },
+                          onEditingComplete: () => node.nextFocus(),
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
-                      child: TextFormField(
-                        // controller: nidCtrl,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            labelText: 'স্মার্ট কার্ড/জাতীয় পরিচয়পত্র নং'),
-                        validator: (value) {
-                          if (value.isEmpty)
-                            return ("জাতীয় পরিচয়পত্র নং প্রদান আবশ্যক");
-                          // if (value.length != 10)
-                          //   return ("সঠিক তথ্য প্রদান করুন");
-                        },
-                        onSaved: (value) {
-                          this.nid = value;
-                        },
-                        onEditingComplete: () => node.nextFocus(),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
+                        child: TextFormField(
+                          // controller: nidCtrl,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              labelText: 'স্মার্ট কার্ড/জাতীয় পরিচয়পত্র নং'),
+                          validator: (value) {
+                            if (value.isEmpty)
+                              return ("জাতীয় পরিচয়পত্র নং প্রদান আবশ্যক");
+                            // if (value.length != 10)
+                            //   return ("সঠিক তথ্য প্রদান করুন");
+                          },
+                          onSaved: (value) {
+                            this.nid = value;
+                          },
+                          onEditingComplete: () => node.nextFocus(),
+                        ),
                       ),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
-                          child: SizedBox(
-                            width: 90,
-                            child: Text(
-                              'ঠিকানা',
-                              style: TextStyle(fontSize: 16),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
+                            child: SizedBox(
+                              width: 95,
+                              child: Text(
+                                'জন্মতারিখ ',
+                                style: TextStyle(fontSize: 16),
+                              ),
                             ),
                           ),
-                        ),
-                        Column(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 226,
-                              child: DropdownButtonFormField<String>(
-                                isExpanded: true,
-                                value: _division,
-                                onChanged: (String value) {
-                                  setState(() {
-                                    _division = value;
-                                    _getDistrictList(_division);
-                                  });
-                                },
+                          SizedBox(
+                            width: 94,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(labelText: 'YYYY'),
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(4),
+                              ],
+                              onSaved: (value) {
+                                this.bday = value;
+                              },
+                              validator: (value) {
+                                if (value.isEmpty) return ("আবশ্যক তথ্য");
+                              },
+                              onEditingComplete: () => node.nextFocus(),
+                            ),
+                          ),
+                          Text('   '),
+                          SizedBox(
+                            width: 50,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(labelText: 'MM'),
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(2),
+                              ],
+                              onSaved: (value) {
+                                this.bday += '-' + value;
+                              },
+                              validator: (value) {
+                                if (value.isEmpty) return ("আবশ্যক তথ্য");
+                              },
+                              onEditingComplete: () => node.nextFocus(),
+                            ),
+                          ),
+                          Text('   '),
+                          SizedBox(
+                            width: 50,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(labelText: 'DD'),
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(2),
+                              ],
+                              onSaved: (value) {
+                                this.bday += '-' + value;
+                              },
+                              validator: (value) {
+                                if (value.isEmpty) return ("আবশ্যক তথ্য");
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
 
-                                hint: Text('Select Division'),
-                                items: divisionList?.map((item) {
-                                      return DropdownMenuItem(
-                                        child: Text(item['name']),
-                                        value: item['id'].toString(),
-                                      );
-                                    })?.toList() ??
-                                    [],
-                                onSaved: (value) {
-                                  divisionList.forEach((p) {
-                                    if (p["id"] == value) {
-                                      this.div = p["name"];
-                                    }
-                                  });
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
+                            child: SizedBox(
+                              width: 90,
+                              child: Text(
+                                'ঠিকানা',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                          Column(
+                            children: <Widget>[
+                              SizedBox(
+                                width: 226,
+                                child: DropdownButtonFormField<String>(
+                                  isExpanded: true,
+                                  value: _division,
+                                  onChanged: (String value) {
+                                    setState(() {
+                                      _division = value;
+                                      _getDistrictList(_division);
+                                    });
+                                  },
 
-                                  // divisionList[int.parse(value)]['name'];
-                                  // this.address += "বিভাগঃ " + this.div + ", ";
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              width: 216,
-                              child: DropdownButtonFormField<String>(
-                                isExpanded: true,
-                                value: _district,
-                                onChanged: (String value) {
-                                  setState(() {
-                                    _district = value;
-                                    _getUpazillaList(_district);
-                                  });
-                                },
-                                hint: Text('Select District'),
-                                items: districtList?.map((item) {
-                                      return new DropdownMenuItem(
-                                        child: Text(item['name']),
-                                        value: item['id'].toString(),
-                                      );
-                                    })?.toList() ??
-                                    [],
-                                onSaved: (value) {
-                                  districtList.forEach((p) {
-                                    if (p["id"] == value) {
-                                      this.dis = p["name"];
-                                    }
-                                  });
-                                  // this.address += "জেলাঃ " + this.dis + ", ";
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              width: 216,
-                              child: DropdownButtonFormField<String>(
-                                isExpanded: true,
-                                value: _upazilla,
-                                onChanged: (String value) {
-                                  setState(() {
-                                    _upazilla = value;
-                                    _getUnionList(_upazilla);
-                                  });
-                                },
-                                hint: Text('Select Upazilla'),
-                                items: upazillaList?.map((item) {
-                                      return new DropdownMenuItem(
-                                        child: Text(item['name']),
-                                        value: item['id'].toString(),
-                                      );
-                                    })?.toList() ??
-                                    [],
-                                onSaved: (value) {
-                                  upazillaList.forEach((p) {
-                                    if (p["id"] == value) {
-                                      this.upa = p["name"];
-                                    }
-                                  });
-                                  // this.address += "উপজেলাঃ " + this.uni + ", ";
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              width: 216,
-                              child: DropdownButtonFormField<String>(
-                                isExpanded: true,
-                                value: _union,
-                                onChanged: (String value) {
-                                  setState(() {
-                                    _union = value;
-                                  });
-                                },
-                                hint: Text('Select Union'),
-                                items: unionList?.map((item) {
-                                      return new DropdownMenuItem(
-                                        child: Text(item['name']),
-                                        value: item['id'].toString(),
-                                      );
-                                    })?.toList() ??
-                                    [],
-                                onSaved: (value) {
-                                  unionList.forEach((p) {
-                                    if (p["id"] == value) {
-                                      this.uni = p["name"];
-                                    }
-                                  });
-                                  // this.address += "ইউনিয়নঃ " + this.uni + ".";
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
-                          child: SizedBox(
-                            width: 95,
-                            child: Text(
-                              'জন্মতারিখ ',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 94,
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(labelText: 'YYYY'),
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(4),
-                            ],
-                            onSaved: (value) {
-                              this.bday = value;
-                            },
-                            validator: (value) {
-                              if (value.isEmpty) return ("আবশ্যক তথ্য");
-                            },
-                          ),
-                        ),
-                        Text('   '),
-                        SizedBox(
-                          width: 50,
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(labelText: 'MM'),
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(2),
-                            ],
-                            onSaved: (value) {
-                              this.bday += '-' + value;
-                            },
-                            validator: (value) {
-                              if (value.isEmpty) return ("আবশ্যক তথ্য");
-                            },
-                          ),
-                        ),
-                        Text('   '),
-                        SizedBox(
-                          width: 50,
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(labelText: 'DD'),
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(2),
-                            ],
-                            onSaved: (value) {
-                              this.bday += '-' + value;
-                            },
-                            validator: (value) {
-                              if (value.isEmpty) return ("আবশ্যক তথ্য");
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
-                          child: SizedBox(
-                            width: 95,
-                            child: Text(
-                              'লিঙ্গ',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 220,
-                          // width: 200,
-                          // height: 200,
-                          child: DropdownButtonFormField<String>(
-                            value: _gender_value,
-                            onChanged: (String value) {
-                              setState(() {
-                                _gender_value = value;
-                              });
-                            },
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return 'আবশ্যক তথ্য';
-                              }
-                            },
-                            items: [
-                              DropdownMenuItem(
-                                child: Text('--Select Gender--'),
-                                value: '--Select--',
-                              ),
-                              DropdownMenuItem(
-                                child: Text(
-                                  'পুরুষ',
+                                  hint: Text('Select Division'),
+                                  items: divisionList?.map((item) {
+                                        return DropdownMenuItem(
+                                          child: Text(item['name']),
+                                          value: item['id'].toString(),
+                                        );
+                                      })?.toList() ??
+                                      [],
+                                  onSaved: (value) {
+                                    divisionList.forEach((p) {
+                                      if (p["id"] == value) {
+                                        this.div = p["name"];
+                                      }
+                                    });
+
+                                    // divisionList[int.parse(value)]['name'];
+                                    // this.address += "বিভাগঃ " + this.div + ", ";
+                                  },
                                 ),
-                                value: 'পুরুষ',
                               ),
-                              DropdownMenuItem(
-                                child: Text('মহিলা'),
-                                value: 'মহিলা',
-                              ),
-                              DropdownMenuItem(
-                                child: Text('অন্যান্য'),
-                                value: 'অন্যান্য',
-                              ),
-                            ],
-                            onSaved: (value) {
-                              if (value == 'পুরুষ')
-                                this.gender = 'male';
-                              else if (value == 'মহিলা')
-                                this.gender = 'female';
-                              else
-                                this.gender = 'others';
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
-                          child: SizedBox(
-                            width: 95,
-                            child: Text(
-                              'আবেদনের ধরণ',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 220,
-                          // width: 200,
-                          // height: 200,
-                          child: DropdownButtonFormField<String>(
-                            value: _type_value,
-                            onChanged: (String value) {
-                              setState(() {
-                                _type_value = value;
-                                dep_loan = _type_value;
-                              });
-                            },
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return 'আবশ্যক তথ্য';
-                              }
-                            },
-                            items: [
-                              DropdownMenuItem(
-                                child: Text('--Select Type--'),
-                                value: '--Select--',
-                              ),
-                              DropdownMenuItem(
-                                child: Text(
-                                  'আমানত',
+                              SizedBox(
+                                width: 216,
+                                child: DropdownButtonFormField<String>(
+                                  isExpanded: true,
+                                  value: _district,
+                                  onChanged: (String value) {
+                                    setState(() {
+                                      _district = value;
+                                      _getUpazillaList(_district);
+                                    });
+                                  },
+                                  hint: Text('Select District'),
+                                  items: districtList?.map((item) {
+                                        return new DropdownMenuItem(
+                                          child: Text(item['name']),
+                                          value: item['id'].toString(),
+                                        );
+                                      })?.toList() ??
+                                      [],
+                                  onSaved: (value) {
+                                    districtList.forEach((p) {
+                                      if (p["id"] == value) {
+                                        this.dis = p["name"];
+                                      }
+                                    });
+                                    // this.address += "জেলাঃ " + this.dis + ", ";
+                                  },
                                 ),
-                                value: 'deposit',
                               ),
-                              DropdownMenuItem(
-                                child: Text('ঋণ'),
-                                value: 'loan',
+                              SizedBox(
+                                width: 216,
+                                child: DropdownButtonFormField<String>(
+                                  isExpanded: true,
+                                  value: _upazilla,
+                                  onChanged: (String value) {
+                                    setState(() {
+                                      _upazilla = value;
+                                      _getUnionList(_upazilla);
+                                    });
+                                  },
+                                  hint: Text('Select Upazilla'),
+                                  items: upazillaList?.map((item) {
+                                        return new DropdownMenuItem(
+                                          child: Text(item['name']),
+                                          value: item['id'].toString(),
+                                        );
+                                      })?.toList() ??
+                                      [],
+                                  onSaved: (value) {
+                                    upazillaList.forEach((p) {
+                                      if (p["id"] == value) {
+                                        this.upa = p["name"];
+                                      }
+                                    });
+                                    // this.address += "উপজেলাঃ " + this.uni + ", ";
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width: 216,
+                                child: DropdownButtonFormField<String>(
+                                  isExpanded: true,
+                                  value: _union,
+                                  onChanged: (String value) {
+                                    setState(() {
+                                      _union = value;
+                                    });
+                                  },
+                                  hint: Text('Select Union'),
+                                  items: unionList?.map((item) {
+                                        return new DropdownMenuItem(
+                                          child: Text(item['name']),
+                                          value: item['id'].toString(),
+                                        );
+                                      })?.toList() ??
+                                      [],
+                                  onSaved: (value) {
+                                    unionList.forEach((p) {
+                                      if (p["id"] == value) {
+                                        this.uni = p["name"];
+                                      }
+                                    });
+                                    // this.address += "ইউনিয়নঃ " + this.uni + ".";
+                                  },
+                                ),
                               ),
                             ],
-                            onSaved: (value) {
-                              this.app_type = value;
-                            },
                           ),
-                        ),
-                      ],
-                    ),
-                    _switch_dep_loan(dep_loan),
-                    _switch_dep_scheme(dep_scheme),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      height: 50,
-                      width: 150,
-                      child: RaisedButton(
-                        color: Colors.orange,
-                        child: Text(
-                          'দাখিল করুন',
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        onPressed: handleSubmit,
+                        ],
                       ),
-                    ),
-                  ],
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
+                            child: SizedBox(
+                              width: 95,
+                              child: Text(
+                                'লিঙ্গ',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 220,
+                            // width: 200,
+                            // height: 200,
+                            child: DropdownButtonFormField<String>(
+                              value: _gender_value,
+                              onChanged: (String value) {
+                                setState(() {
+                                  _gender_value = value;
+                                });
+                              },
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return 'আবশ্যক তথ্য';
+                                }
+                              },
+                              items: [
+                                DropdownMenuItem(
+                                  child: Text('--Select Gender--'),
+                                  value: '--Select--',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text(
+                                    'পুরুষ',
+                                  ),
+                                  value: 'পুরুষ',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text('মহিলা'),
+                                  value: 'মহিলা',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text('অন্যান্য'),
+                                  value: 'অন্যান্য',
+                                ),
+                              ],
+                              onSaved: (value) {
+                                if (value == 'পুরুষ')
+                                  this.gender = 'male';
+                                else if (value == 'মহিলা')
+                                  this.gender = 'female';
+                                else
+                                  this.gender = 'others';
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(4, 4, 0, 0),
+                            child: SizedBox(
+                              width: 95,
+                              child: Text(
+                                'আবেদনের ধরণ',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 220,
+                            // width: 200,
+                            // height: 200,
+                            child: DropdownButtonFormField<String>(
+                              value: _type_value,
+                              onChanged: (String value) {
+                                setState(() {
+                                  _type_value = value;
+                                  dep_loan = _type_value;
+                                });
+                              },
+                              validator: (String value) {
+                                if (value.isEmpty) {
+                                  return 'আবশ্যক তথ্য';
+                                }
+                              },
+                              items: [
+                                DropdownMenuItem(
+                                  child: Text('--Select Type--'),
+                                  value: '--Select--',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text(
+                                    'আমানত',
+                                  ),
+                                  value: 'deposit',
+                                ),
+                                DropdownMenuItem(
+                                  child: Text('ঋণ'),
+                                  value: 'loan',
+                                ),
+                              ],
+                              onSaved: (value) {
+                                this.app_type = value;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      _switch_dep_loan(dep_loan),
+                      _switch_dep_scheme(dep_scheme),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 50,
+                        width: 150,
+                        child: RaisedButton(
+                          color: Colors.orange,
+                          child: Text(
+                            'দাখিল করুন',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          onPressed: handleSubmit,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ]),
+            ]),
+          ),
         ));
   }
 }
